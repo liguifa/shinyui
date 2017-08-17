@@ -1,4 +1,6 @@
-﻿.cpuinfo-nav {
+/*---------------------------------------------------------*/
+
+.cpuinfo-nav {
     border-bottom: 1px solid #808080;
 }
 
@@ -42,4 +44,40 @@
 .report-disk-info ul li{
     float:left;
     margin-right:10px;
+}
+
+/*---------------------------------------------------------*/
+
+.sui-report{
+    border:1px solid #D9D9D9;
+    padding:18px;
+}
+
+.sui-report-histogram{
+    
+}
+
+.sui-report-histogram-y{
+    stroke:#D9D9D9;
+    stroke-width:1
+}
+
+.sui-report-histogram-x{
+    stroke:#D9D9D9;
+    stroke-width:1
+}
+
+.sui-report-histogram-dot{
+    stroke:#D9D9D9;
+    stroke-width:1
+}
+
+.sui-report-histogram-item{
+    fill:#4472C4;
+    stroke-width:1;
+    stroke:#ffffff;
+}
+
+.sui-report-histogram-item:hover{
+    fill:#5FB554;
 }

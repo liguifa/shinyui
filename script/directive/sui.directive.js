@@ -408,15 +408,12 @@ angular.module("sqladmin", [])
                         e = e || window.event; 　//IE window.event
                         var t = e.target || e.srcElement; //目标对象
                         if (t && t.className == "sui-icon-arrow-right") {
-                            var is_load  = t.attributes["is_load"];
-                            var is_spread = t.attributes["is_spread"];
+                            var is_load  = t.attributes["is_load"] = true;
+                            var is_spread = t.attributes["is_spread"] = true;
                             if (is_load) {
                                 var children_Id = t.attributes["children_Id"];
                                 document.getElementById(children_Id).style.visibility = is_spread ? "hidden" : "visible";
                                 document.getElementById(t.id).attributes["is_spread"] = !is_spread;
-                                if (is_spread) {
-                                    document.getElementById(children_Id).style.float = "left";
-                                }
                             }
                         }
                         else {

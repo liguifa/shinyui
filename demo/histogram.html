@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+	<meta charset="utf-8" />
+    <link href="../css/sui.report.style.css" rel="stylesheet" />
+</head>
+<body ng-app="demo" ng-controller="histogram.controller">
+    <sui-histogram points="vm.points" dot-x="vm.dotX" dot-y="vm.dotY"></sui-histogram>
+</body>
+</html>
+<script src="../Script/lib/angular.min.js"></script>
+<script src="../Script/directive/sui.report.directive.js"></script>
+<script>
+    (function () {
+        function histogram_controller($scope) {
+            $scope.vm = {
+                points: [{x:50,y:350}, {x:50,y:234}, {x:50,y:467},{x:50,y:350}, {x:50,y:234}, {x:50,y:467},{x:50,y:350}, {x:50,y:234}, {x:50,y:467},{x:50,y:350}],
+                dotX:["1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月"],
+                dotY:[10,20,30,40,50],
+            };
+        }
+
+        angular.module("demo", ["shinyui"]).controller("histogram.controller", histogram_controller);
+    })();
+</script>
