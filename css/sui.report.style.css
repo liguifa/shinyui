@@ -81,3 +81,8 @@
 .sui-report-histogram-item:hover{
     fill:#5FB554;
 }
+
+.sui-report-histogram-text{
+    fill: #000000;
+    font-size: 12px;
+}
