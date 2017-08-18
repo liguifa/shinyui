@@ -1,4 +1,4 @@
-angular.module("shinyui", [])
+﻿angular.module("shinyui", [])
 
 .directive("suiHistogram", function () {
     var vm = {
@@ -120,6 +120,62 @@ angular.module("shinyui", [])
             });
 
             $scope.$watch("title",function(title){
+                $scope.vm.title = title;
+            })
+        }
+    }
+})
+
+.directive("suiFan", function () {
+    var vm = {
+        template: "<div><svg class='sui-report sui-report-fan' width='{{vm.w}}px' height='{{vm.h}}px'>\
+                    <path fill='red' stroke='none' d='M150,150L250,150A100,100,0,0,0,220.71067811865476,79.28932188134526Z' opacity='1' fill-opacity='1' stroke-width='2.9994665980652173' style='-webkit-tap-highlight-color: rgba(0, 0, 0, 0); opacity: 1; fill-opacity: 1;' transform='matrix(1,0,0,1,0,0)'></path>\
+                   </svg></div>"
+    }
+    return {
+        restrict: "E",
+        template: vm.template,
+        replace: true,
+        priority: 1,
+        scope: {
+            points: "=",
+            dotX: "=",
+            dotY: "=",
+            width: "=",
+            height: "=",
+            title: "=",
+        },
+        controller: function ($scope) {
+            $scope.vm = {
+                points: [],
+                dotX: [],
+                dotY: [],
+                w: 500,
+                h: 500,
+                title: "",
+            };
+
+            $scope.$watch("points", function (points) {
+                $scope.vm.points = points;
+            });
+
+            $scope.$watch("dotX", function (x) {
+                $scope.vm.dotX = x;
+            });
+
+            $scope.$watch("dotY", function (y) {
+                $scope.vm.dotY = y;
+            });
+
+            $scope.$watch("width", function (width) {
+                $scope.vm.w = width;
+            });
+
+            $scope.$watch("height", function (height) {
+                $scope.vm.h = height;
+            });
+
+            $scope.$watch("title", function (title) {
                 $scope.vm.title = title;
             })
         }
