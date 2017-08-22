@@ -91,3 +91,14 @@
     border-radius:50%;
     padding:0px;
 }
+
+.sui-report-fan-path{
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0); 
+    opacity: 1; 
+    fill-opacity: 1;
+    transform: matrix(1, 0, 0, 1, 0, 0);
+}
+.sui-report-fan-path:hover{
+    fill-opacity: 0.9;
+    opacity: 0.9;
+}

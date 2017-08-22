@@ -128,59 +128,84 @@
 
 .directive("suiFan", function () {
     var vm = {
-        template: "<div><svg class='sui-report sui-report-fan' width='{{vm.w}}px' height='{{vm.h}}px'>\
-                    <path fill='{{point.c}}' stroke='none' d='{{point.d}}' opacity='1' fill-opacity='1' stroke-width='2.9994665980652173' style='-webkit-tap-highlight-color: rgba(0, 0, 0, 0); opacity: 1; fill-opacity: 1;' transform='matrix(1,0,0,1,0,0)' ng-repeat='point in vm.points'></path>\
+        template: "<div><svg class='sui-report sui-report-fan' width='{{vm.r}}px' height='{{vm.r}}px'>\
+                    <path class='sui-report-fan-path' fill='{{point.c}}' d='{{point.d}}' ng-repeat='point in vm.points'></path>\
+                   </svg><svg width='{{vm.r}}px' height='14px'>\
+                    <circle cx='{{$index*108+7}}' cy='7' r='7' fill='{{point.c}}' ng-repeat='point in vm.points'/>\
+                    <text x='{{$index*108+22}}' y='14' fill='rgb(102, 102, 102);' ng-repeat='point in vm.points'>{{point.title}}</text>\
                    </svg></div>",
         build:function(points,r){
             var center = "M"+r/2+","+r/2;
-            var frontX = 300;
-            var frontY = 0;
+            var front = {x:r/2,y:0};
             var frontWeight = 0;
-            var addX = true;
-            var addY = true;
             var newPoints = [];
             for(var i in points){
-                // var weight = r*points[i];
-                // var tempX = addX ? frontX+weight:frontX-weight;
-                // if(tempX>=r)
-                // {
-                //     addX = false;
-                //     tempX = r - (tempX - r);
-                // }
-                // if(tempX<=0)
-                // {
-                //     addX = true;
-                //     tempX = 0 - tempX;
-                // }
-                // var tempY = addY ? frontY+weight:frontY-weight;
-                // if(tempY>=r)
-                // {
-                //     addY = false;
-                //     tempY = r - (tempY - r);
-                // }
-                // if(tempY<=0)
-                // {
-                //     addY = true;
-                //     tempY = 0 - tempY;
-                // }
-                var weight = 360 * points[i];
-                var tempWeight = 90-weight-frontWeight;
-                var y = Math.sin(tempWeight* 0.017453293) * r/2;
-                tempY = r/2 - y;
-                var tempWeight = frontWeight + weight;
-                var x = Math.sin(tempWeight* 0.017453293) * r/2;
-                tempX = r/2 + x;
-                frontWeight = weight;
-                newPoints.push({d:center+"L"+frontX+","+frontY+"A"+r/2+","+r/2+",0,1,1,"+tempX+","+tempY,c:this.GenerateColor()});
-                frontX = tempX;
-                frontY = tempY;
+                var newPoint = this.Calculation(360 * points[i].weight,front,r,frontWeight);
+                newPoints.push({title:points[i].title,d:center+"L"+front.x+","+front.y+"A"+r/2+","+r/2+",0,1,1,"+newPoint.x+","+newPoint.y,c:this.GenerateColor()});
+                front = newPoint;
+                frontWeight += 360 * points[i].weight;
             }
             return newPoints;
+        },
+        Calculation:function(weight,front,r,frontWeight){
+            var quadrant = (frontWeight + weight) / 90;
+            if((frontWeight + weight) % 90 == 0){
+                switch(quadrant){
+                    case 0: return {x:r/2, y:0};
+                    case 1: return {x:r, y:r/2};
+                    case 2: return {x:r/2, y:r};
+                    case 3: return {x:0, y:r/2};
+                    case 4: return {x:r/2, y:0};
+                }
+            } else {
+                switch(parseInt(quadrant)){
+                    case 0:return this.CalculationForOneQuadrant(weight,front,r,frontWeight);
+                    case 1:return this.CalculationForTwoQuadrant(weight,front,r,frontWeight);
+                    case 2:return this.CalculationForThreeQuadrant(weight,front,r,frontWeight);
+                    case 3:return this.CalculationForFourQuadrant(weight,front,r,frontWeight);
+                }
+            }
+        },
+        CalculationForOneQuadrant:function(weight,front,r,frontWeight){
+            var weightY = 90 - (weight + frontWeight);
+            var lengthY = Math.sin(weightY * 0.017453293) * r/2;
+            var newY = r/2 - lengthY;
+            var weightX = frontWeight + weight;
+            var lengthX = Math.sin(weightX * 0.017453293) * r/2;
+            var newX = r/2 + lengthX;
+            return {x:newX, y:newY};
+        },
+        CalculationForTwoQuadrant:function(weight,front,r,frontWeight){
+            var weightY = (weight + frontWeight) - 90;
+            var lengthY = Math.sin(weightY * 0.017453293) * r/2;
+            var newY = r/2 + lengthY;
+            var weightX = 180 - (frontWeight + weight);
+            var lengthX = Math.sin(weightX * 0.017453293) * r/2;
+            var newX = r/2 + lengthX;
+            return {x:newX, y:newY};
+        },
+        CalculationForThreeQuadrant:function(weight,front,r,frontWeight){
+            var weightY = 270 - (weight + frontWeight);
+            var lengthY = Math.sin(weightY * 0.017453293) * r/2;
+            var newY = r/2 + lengthY;
+            var weightX = (frontWeight + weight) - 180;
+            var lengthX = Math.sin(weightX * 0.017453293) * r/2;
+            var newX = r/2 - lengthX;
+            return {x:newX, y:newY};
+        },
+        CalculationForFourQuadrant:function(weight,front,r,frontWeight){
+            var weightY = (weight + frontWeight) - 270;
+            var lengthY = Math.sin(weightY * 0.017453293) * r/2;
+            var newY = r/2 - lengthY;
+            var weightX = 360 - (frontWeight + weight);
+            var lengthX = Math.sin(weightX * 0.017453293) * r/2;
+            var newX = r/2 - lengthX;
+            return {x:newX, y:newY};
         },
         GenerateColor:function(){
             return "#"+parseInt(Math.random()*1000000);
         }
-    }
+    };
     return {
         restrict: "E",
         template: vm.template,
@@ -190,8 +215,7 @@
             points: "=",
             dotX: "=",
             dotY: "=",
-            width: "=",
-            height: "=",
+            r:"=",
             title: "=",
         },
         controller: function ($scope) {
@@ -199,8 +223,7 @@
                 points: [],
                 dotX: [],
                 dotY: [],
-                w: 500,
-                h: 500,
+                r: 600,
                 title: "",
             };
 
@@ -217,14 +240,9 @@
                
             });
 
-            $scope.$watch("width", function (width) {
-                $scope.vm.w = width;
-                  $scope.vm.points = vm.build($scope.points,width);
-            });
-
-            $scope.$watch("height", function (height) {
-                $scope.vm.h = height;
-                  $scope.vm.points = vm.build($scope.points,height);
+            $scope.$watch("r", function (r) {
+                $scope.vm.r = r;
+                $scope.vm.points = vm.build($scope.points,r);
             });
 
             $scope.$watch("title", function (title) {
