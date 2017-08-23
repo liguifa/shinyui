@@ -128,11 +128,13 @@
 
 .directive("suiFan", function () {
     var vm = {
-        template: "<div><svg class='sui-report sui-report-fan' width='{{vm.r}}px' height='{{vm.r}}px'>\
-                    <path class='sui-report-fan-path' fill='{{point.c}}' d='{{point.d}}' ng-repeat='point in vm.points'></path>\
-                   </svg><svg width='{{vm.r}}px' height='14px'>\
-                    <circle cx='{{$index*108+7}}' cy='7' r='7' fill='{{point.c}}' ng-repeat='point in vm.points'/>\
-                    <text x='{{$index*108+22}}' y='14' fill='rgb(102, 102, 102);' ng-repeat='point in vm.points'>{{point.title}}</text>\
+        template: "<div><svg class='sui-report sui-report-fan' width='{{vm.r}}px' height='{{vm.r+30}}px'>\
+                    <path class='sui-report-fan-path' fill='{{point.c}}' d='{{point.d}}' ng-mouseenter='vm.showWeight(point)'  ng-repeat='point in vm.points'></path>\
+                    <circle cx='{{vm.r/2}}' cy='{{vm.r/2}}' r='90' fill='#ffffff' />\
+                    <text class='sui-report-weight' x='{{vm.r/2}}' y='{{vm.r/2}}' fill='{{point.c}}' ng-if='point.is_show_weight' ng-repeat='point in vm.points'>{{point.weight}}</text>\
+                    <text class='sui-report-weight-title' x='{{vm.r/2}}' y='{{vm.r/2+20}}' ng-if='point.is_show_weight' ng-repeat='point in vm.points'>{{point.title}}</text>\
+                    <circle ng-if='false' cx='{{$index*108+7}}' cy='{{vm.r+17}}' r='7' fill='{{point.c}}' ng-repeat='point in vm.points'/>\
+                    <text ng-if='false' x='{{$index*108+22}}' y='{{vm.r+24}}' fill='rgb(102, 102, 102);' ng-repeat='point in vm.points'>{{point.title}}</text>\
                    </svg></div>",
         build:function(points,r){
             var center = "M"+r/2+","+r/2;
@@ -141,7 +143,13 @@
             var newPoints = [];
             for(var i in points){
                 var newPoint = this.Calculation(360 * points[i].weight,front,r,frontWeight);
-                newPoints.push({title:points[i].title,d:center+"L"+front.x+","+front.y+"A"+r/2+","+r/2+",0,1,1,"+newPoint.x+","+newPoint.y,c:this.GenerateColor()});
+                newPoints.push({
+                    title:points[i].title,
+                    d:center+"L"+front.x+","+front.y+"A"+r/2+","+r/2+",0,0,1,"+newPoint.x+","+newPoint.y+"Z",
+                    c:this.GenerateColor(),
+                    weight:points[i].weight * 100 + "%",
+                    is_show_weight:false
+                });
                 front = newPoint;
                 frontWeight += 360 * points[i].weight;
             }
@@ -225,6 +233,12 @@
                 dotY: [],
                 r: 600,
                 title: "",
+                showWeight:function(point){
+                    $scope.vm.points.forEach(function(item) {
+                        item.is_show_weight = false;
+                    }, this);
+                    point.is_show_weight = true;
+                }
             };
 
             $scope.$watch("points", function (points) {
@@ -248,6 +262,117 @@
             $scope.$watch("title", function (title) {
                 $scope.vm.title = title;
             })
+        }
+    }
+})
+
+.directive("suiRadar",function(){
+    var vm = {
+        template:"<div><svg id='sui-report-radar' class='sui-report sui-report-radar' width='{{vm.r}}px' height='{{vm.r}}px'>\
+                     <circle cx='{{vm.r/2}}' cy='{{vm.r/2}}' r='550'  stroke='#ffffff' stroke-width='1' />\
+                     <circle cx='{{vm.r/2}}' cy='{{vm.r/2}}' r='500'  stroke='#ffffff' stroke-width='1' />\
+                     <circle cx='{{vm.r/2}}' cy='{{vm.r/2}}' r='450'  stroke='#ffffff' stroke-width='1' />\
+                     <circle cx='{{vm.r/2}}' cy='{{vm.r/2}}' r='400'  stroke='#ffffff' stroke-width='1' />\
+                     <circle cx='{{vm.r/2}}' cy='{{vm.r/2}}' r='350'  stroke='#ffffff' stroke-width='1' />\
+                     <circle cx='{{vm.r/2}}' cy='{{vm.r/2}}' r='300'  stroke='#ffffff' stroke-width='1' />\
+                     <circle cx='{{vm.r/2}}' cy='{{vm.r/2}}' r='250'  stroke='#ffffff' stroke-width='1' />\
+                     <circle cx='{{vm.r/2}}' cy='{{vm.r/2}}' r='200'  stroke='#ffffff' stroke-width='1' />\
+                     <circle cx='{{vm.r/2}}' cy='{{vm.r/2}}' r='150'  stroke='#ffffff' stroke-width='1' />\
+                     <circle cx='{{vm.r/2}}' cy='{{vm.r/2}}' r='100'  stroke='#ffffff' stroke-width='1' />\
+                     <circle cx='{{vm.r/2}}' cy='{{vm.r/2}}' r='50'  stroke='#ffffff' stroke-width='1' />\
+                   </svg></div>",
+        Calculation:function(weight,front,r,frontWeight){
+            var quadrant = (frontWeight + weight) / 90;
+            if((frontWeight + weight) % 90 == 0){
+                switch(quadrant){
+                    case 0: return {x:r/2, y:0};
+                    case 1: return {x:r, y:r/2};
+                    case 2: return {x:r/2, y:r};
+                    case 3: return {x:0, y:r/2};
+                    case 4: return {x:r/2, y:0};
+                }
+            } else {
+                switch(parseInt(quadrant)){
+                    case 0:return this.CalculationForOneQuadrant(weight,front,r,frontWeight);
+                    case 1:return this.CalculationForTwoQuadrant(weight,front,r,frontWeight);
+                    case 2:return this.CalculationForThreeQuadrant(weight,front,r,frontWeight);
+                    case 3:return this.CalculationForFourQuadrant(weight,front,r,frontWeight);
+                }
+            }
+        },
+        CalculationForOneQuadrant:function(weight,front,r,frontWeight){
+            var weightY = 90 - (weight + frontWeight);
+            var lengthY = Math.sin(weightY * 0.017453293) * r/2;
+            var newY = r/2 - lengthY;
+            var weightX = frontWeight + weight;
+            var lengthX = Math.sin(weightX * 0.017453293) * r/2;
+            var newX = r/2 + lengthX;
+            return {x:newX, y:newY};
+        },
+        CalculationForTwoQuadrant:function(weight,front,r,frontWeight){
+            var weightY = (weight + frontWeight) - 90;
+            var lengthY = Math.sin(weightY * 0.017453293) * r/2;
+            var newY = r/2 + lengthY;
+            var weightX = 180 - (frontWeight + weight);
+            var lengthX = Math.sin(weightX * 0.017453293) * r/2;
+            var newX = r/2 + lengthX;
+            return {x:newX, y:newY};
+        },
+        CalculationForThreeQuadrant:function(weight,front,r,frontWeight){
+            var weightY = 270 - (weight + frontWeight);
+            var lengthY = Math.sin(weightY * 0.017453293) * r/2;
+            var newY = r/2 + lengthY;
+            var weightX = (frontWeight + weight) - 180;
+            var lengthX = Math.sin(weightX * 0.017453293) * r/2;
+            var newX = r/2 - lengthX;
+            return {x:newX, y:newY};
+        },
+        CalculationForFourQuadrant:function(weight,front,r,frontWeight){
+            var weightY = (weight + frontWeight) - 270;
+            var lengthY = Math.sin(weightY * 0.017453293) * r/2;
+            var newY = r/2 - lengthY;
+            var weightX = 360 - (frontWeight + weight);
+            var lengthX = Math.sin(weightX * 0.017453293) * r/2;
+            var newX = r/2 - lengthX;
+            return {x:newX, y:newY};
+        },
+    }
+    return {
+        restrict: "E",
+        template: vm.template,
+        replace: true,
+        priority: 1,
+        scope: {
+            r:"=",
+        },
+        controller: function ($scope) {
+            $scope.vm = {
+                r: 600,
+                weight:0.01,
+                point: {x:300,y:0}
+            };
+
+            $scope.$watch("r", function (r) {
+                $scope.vm.r = r;
+            });
+
+            for(var i = 0;i<100;i++) {
+                // <line x1='{{vm.r/2}}' y1='{{vm.r/2}}' x2='{{vm.point.x}}' y2='{{vm.point.y}}' stroke='#ffffff' stroke-width='1' />\
+                var line = document.createElement("line");
+                line.setAttribute("x1",$scope.vm.r/2);
+                line.setAttribute("y1",$scope.vm.r/2);
+                var point = vm.Calculation($scope.vm.weight * 360, {x:$scope.vm.r/2,y:0},$scope.vm.r,0);
+            }
+
+            window.setInterval(function(){
+                $scope.$apply(function(){
+                    $scope.vm.point = vm.Calculation($scope.vm.weight * 360, {x:$scope.vm.r/2,y:0},$scope.vm.r,0);
+                    $scope.vm.weight+=0.01;
+                    if($scope.vm.weight>1){
+                        $scope.vm.weight = 0;
+                    }
+                });
+            },100);
         }
     }
 })

@@ -88,8 +88,8 @@
 }
 
 .sui-report-fan{
-    border-radius:50%;
     padding:0px;
+    border: none;
 }
 
 .sui-report-fan-path{
@@ -98,7 +98,23 @@
     fill-opacity: 1;
     transform: matrix(1, 0, 0, 1, 0, 0);
 }
+
 .sui-report-fan-path:hover{
     fill-opacity: 0.9;
     opacity: 0.9;
+}
+
+.sui-report-weight{
+    font-size:42px;
+    text-anchor:middle;
+}
+
+.sui-report-weight-title{
+    fill:rgb(102, 102, 102);
+    text-anchor:middle;
+}
+
+.sui-report-radar{
+    border-radius: 50%;
+    background: #000000;
 }
