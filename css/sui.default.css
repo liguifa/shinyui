@@ -468,6 +468,13 @@ body,html,document {
     z-index: 996;
 }
 
+.sui-datagrid-tool{
+    height:40px;
+    border-top:2px solid #009688;
+    border-left:1px solid #e2e2e2;
+    border-right:1px solid #e2e2e2;
+}
+
     .sui-datagrid thead tr {
         background-color: #f2f2f2;
     }

@@ -646,7 +646,7 @@ angular.module("sqladmin", [])
 .directive('suiDatagrid', ["guid.service",function (guid)
 {
     var vm = {
-        template: '<div class="sui-datagrid-content">\
+        template: '<div class="sui-datagrid-content"><div class="sui-datagrid-tool"></div>\
     <table class="sui-datagrid">\
         <thead ng-if="isShowThead">\
       <tr>\
@@ -731,7 +731,7 @@ angular.module("sqladmin", [])
                 for (var i in fields)
                 {
                     var f = {
-                        name: fields[i].Name,
+                        name: fields[i].name,
                         isPrimary:false,
                         isForeign: false,
                         isSort: false,
@@ -1838,10 +1838,16 @@ angular.module("sqladmin", [])
             $scope.$watch("navs", function (navs) {
                 $scope.vm.navs = navs.map(function (nav) {
                     nav.isShowSubs = nav.isShowSubs ? true : false;
-                    nav.subs = nav.subs.map(function (sub) {
-                        sub.isShowSubs = sub.isShowSubs ? true : false
-                        return sub;
-                    });
+                    if (nav.subs) {
+                        nav.subs = nav.subs.map(function (sub) {
+                            sub.isShowSubs = sub.isShowSubs ? true : false
+                            return sub;
+                        });
+                    }
+                    else
+                    {
+                        nav.subs = [];
+                    }
                     return nav;
                 });
             }, true);
