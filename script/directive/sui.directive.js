@@ -1793,7 +1793,7 @@ angular.module("sqladmin", [])
         scope: {
             text: "=",
             type: "=",
-            disuibled: "=",
+            disabled: "=",
             size: "=",
             href: "=",
             click:"&"
@@ -1817,10 +1817,10 @@ angular.module("sqladmin", [])
             $scope.$watch("type", function (type) {
                 $scope.vm.type = "sui-button-" + type;
             });
-            $scope.$watch("disuibled", function (disuibled) {
+            $scope.$watch("disabled", function (disabled) {
                 setTimeout(function () {
                     $scope.$apply(function () {
-                        $scope.vm.type = disuibled ? "sui-button-disuibled" : "sui-button-" + $scope.type || "sui-button-default";
+                        $scope.vm.type = disabled ? "sui-button-disabled" : "sui-button-" + $scope.type || "sui-button-default";
                     });
                 }, 100);
             });

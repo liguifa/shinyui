@@ -20,7 +20,7 @@
 	<sui-nav navs="vm.navs" icon="vm.icon"></sui-nav>
 	<sui-sidebar items="vm.sidenavs" style="z-index:999"></sui-sidebar>
 	<!--<sa-page url="vm.url" id="vm.name" style="margin-left:200px;height:100%;width:100%"></sa-page>-->
-     <iframe src="{{vm.url}}" name="index_view" url="vm.url" id="vm.name" style="margin-left:200px;height:100%;width:100%;overflow-y: auto;overflow-x: hidden;position:absolute;top:55px;" class="ng-isolate-scope"></iframe>
+     <iframe src="{{vm.url}}" name="index_view" url="vm.url" id="vm.name" style="margin-left:200px;height:{{vm.iframeHeight}}px;width:{{vm.iframeWidth}}px;overflow-y: auto;overflow-x: hiddens;position:absolute;top:55px;" class="ng-isolate-scope"></iframe>
      <sui-footer><span>ShinyUI</span></sui-footer>
 </body>
 </html>
@@ -33,7 +33,7 @@
                 navs: [
                     {title:"UI",url:"https://www.baidu.com",isActive:true},
                     {title:"function",url:"https://www.baidu.com",isActive:false},
-                ],
+                ], 
                 icon: "demo/images/logo.png",
                 name: "index_view",
                 sidenavs: [
@@ -43,6 +43,9 @@
                 ],
                 url: "demo/button.html",
             }
+
+            $scope.vm.iframeWidth = document.getElementsByTagName("body")[0].scrollWidth - 230;
+            $scope.vm.iframeHeight = document.getElementsByTagName("body")[0].scrollHeight - 100;
         }
         angular.module("index", ["sqladmin"]).controller("index.controller", index_controller);
     })();
