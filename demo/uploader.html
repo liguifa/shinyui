@@ -1,0 +1,60 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="utf-8" />
+    <link href="../css/prism.css" rel="stylesheet" />
+    <link href="../css/sui.default.css" rel="stylesheet" />
+    <style>
+        html,body{
+            overflow-x:hidden;
+        }
+    </style>
+</head>
+<body ng-app="check" ng-controller="check.controller">
+    <sui-line title="'按钮示例'"></sui-line>
+    <sui-uploader upload="vm.upload(filename)" title="'普通上传'" file-types="['mp3','docx','doc','mp4']" file-size="65535"></sui-uploader>
+
+    <sui-line title="'示例代码'"></sui-line>
+    <sui-code code='vm.code' style="height:400px;width:100%;margin-top: 10px;margin-bottom: 10px;">
+        <pre><code class="language-javascript">
+    (function () {
+        function check_controller($scope) {
+            $scope.vm = {
+                fields: [{ name: "文件名" }, { name: "文件大小" }, { name: "修改日期" }, { name: "文件类别" }, { name: "创建者" }, { name: "权限" }],
+                datas: [{ rows: { name: "123.txt", size: "17K", date: "12/12/2020", type: "txt", createBy: "Guifa Li", p: "读/写" } },
+                { rows: { name: "123.txt", size: "17K", date: "12/12/2020", type: "txt", createBy: "Guifa Li", p: "读/写" } },
+                { rows: { name: "123.txt", size: "17K", date: "12/12/2020", type: "txt", createBy: "Guifa Li", p: "读/写" } },
+                { rows: { name: "123.txt", size: "17K", date: "12/12/2020", type: "txt", createBy: "Guifa Li", p: "读/写" } },
+                { rows: { name: "123.txt", size: "17K", date: "12/12/2020", type: "txt", createBy: "Guifa Li", p: "读/写" } },
+                { rows: { name: "123.txt", size: "17K", date: "12/12/2020", type: "txt", createBy: "Guifa Li", p: "读/写" } },
+                { rows: { name: "123.txt", size: "17K", date: "12/12/2020", type: "txt", createBy: "Guifa Li", p: "读/写" } },
+                { rows: { name: "123.txt", size: "17K", date: "12/12/2020", type: "txt", createBy: "Guifa Li", p: "读/写" } }],
+            }
+        }
+        angular.module("check", ["sqladmin"]).controller("check.controller", check_controller);
+    })();
+            </code></pre>
+    </sui-code>
+    <sui-line title="'按钮属性'"></sui-line>
+    <sui-datagrid is-show-thead="true" is-show-tool="false" is-show-footer="false" fields="vm.property.fields" is-can-select="false" is-edit="false" datas="vm.property.datas"></sui-datagrid>
+    <sui-line title="'按钮方法'"></sui-line>
+    <sui-datagrid is-show-thead="true" is-show-tool="false" is-show-footer="false" fields="vm.property.fields" is-can-select="false" is-edit="false" datas="vm.property.datas"></sui-datagrid>
+</body>
+</html>
+<script src="../script/lib/prism.js"></script>
+<script src="../script/lib/angular.min.js"></script>
+<script src="../script/directive/sui.directive.js"></script>
+<script src="../script/common/grid.service.js"></script>
+<script>
+    (function () {
+        function check_controller($scope) {
+            $scope.vm = {
+                upload:function(f){
+                    alert(f);
+                }
+            }
+        }
+        angular.module("check", ["sqladmin"]).controller("check.controller", check_controller);
+    })();
+</script>

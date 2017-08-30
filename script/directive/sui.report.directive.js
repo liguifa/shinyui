@@ -356,14 +356,6 @@
                 $scope.vm.r = r;
             });
 
-            for(var i = 0;i<100;i++) {
-                // <line x1='{{vm.r/2}}' y1='{{vm.r/2}}' x2='{{vm.point.x}}' y2='{{vm.point.y}}' stroke='#ffffff' stroke-width='1' />\
-                var line = document.createElement("line");
-                line.setAttribute("x1",$scope.vm.r/2);
-                line.setAttribute("y1",$scope.vm.r/2);
-                var point = vm.Calculation($scope.vm.weight * 360, {x:$scope.vm.r/2,y:0},$scope.vm.r,0);
-            }
-
             window.setInterval(function(){
                 $scope.$apply(function(){
                     $scope.vm.point = vm.Calculation($scope.vm.weight * 360, {x:$scope.vm.r/2,y:0},$scope.vm.r,0);
@@ -373,6 +365,31 @@
                     }
                 });
             },100);
+        },
+        compile: function compile(element, attrs, transclude) {
+            return {
+                pre: function preLink($scope, element, attrs, controller) { 
+                    var radar = element[0].children[0];
+                    for(var i = 0;i<100;i++) {
+                        // <line x1='{{vm.r/2}}' y1='{{vm.r/2}}' x2='{{vm.point.x}}' y2='{{vm.point.y}}' stroke='#ffffff' stroke-width='1' />\
+                        var line = document.createElement("line");
+                        line.setAttribute("x1",$scope.vm.r/2);
+                        line.setAttribute("y1",$scope.vm.r/2);
+                        var point = vm.Calculation($scope.vm.weight * 360, {x:$scope.vm.r/2,y:0},$scope.vm.r,0);
+                        line.setAttribute("x2",point.x);
+                        line.setAttribute("y2",point.y);
+                        line.setAttribute("stroke","#ffffff");
+                        line.setAttribute("stroke-width","1");
+                        radar.appendChild(line);
+                    }
+                },
+                post: function postLink($scope, element, attrs, controller) { 
+
+                }
+            }
+        },
+        link:function($scope,element,attr) {
+
         }
     }
 })

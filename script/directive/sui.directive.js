@@ -2109,6 +2109,46 @@ angular.module("sqladmin", [])
     }
 })
 
+.directive("suiUploader",function(){
+    var vm = {
+        template:"<div>\
+                    <sui-button class='sui-uploader-button' text='vm.title' click='vm.upload()'></sui-button>\
+                    <input class='sui-uploader-input' type='file' ng-change='vm.uploadChange()'/>\
+                  </div>"
+    }
+    return {
+        restrict: "E",
+        template: vm.template,
+        replace: true,
+        priority: 1,
+        scope: {
+            upload:"&",
+            title:"=",
+            fileTypes:"=",
+            fileSize:"="
+        },
+        controller: function ($scope) {
+            $scope.vm = {
+                title:"",
+                fileInput:null,
+                upload:function(){
+                    $scope.vm.fileInput.click();
+                },
+                uploadChange:function(f){
+                    $scope.upload(f);
+                }
+            }
+
+            $scope.$watch("title",function(title){
+                $scope.vm.title = title;
+            })
+        },
+        link:function($scope,element,attrs){
+            $scope.vm.fileInput = element[0].children[1];
+        }
+    }
+})
+
 .directive("suiLines", ["guid.service",function (guid) {
     var vm = {
         id:guid.newGuid(),
