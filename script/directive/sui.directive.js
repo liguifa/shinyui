@@ -2111,9 +2111,11 @@ angular.module("sqladmin", [])
 
 .directive("suiUploader",function(){
     var vm = {
-        template:"<div>\
-                    <sui-button class='sui-uploader-button' text='vm.title' click='vm.upload()'></sui-button>\
-                    <input class='sui-uploader-input' type='file' ng-change='vm.uploadChange()'/>\
+        template:"<div class='sui-uploader'>\
+                    <div><sui-progress value='vm.progress' ng-if='vm.inprogress'></sui-progress><span ng-if='!vm.inprogress'>{{vm.filename}}</span></div>\
+                    <sui-button class='sui-uploader-button' text='vm.title' click='vm.openUpload()'></sui-button>\
+                    <input class='sui-uploader-input' type='file' onchange='angular.element(this).scope().vm.change()'/>\
+                    <span>{{vm.fileTypes.join(',')}} ({{vm.fileSize / 1024}} K)</span>\
                   </div>"
     }
     return {
@@ -2125,26 +2127,48 @@ angular.module("sqladmin", [])
             upload:"&",
             title:"=",
             fileTypes:"=",
-            fileSize:"="
+            fileSize:"=",
+            progress:"="
         },
         controller: function ($scope) {
             $scope.vm = {
                 title:"",
                 fileInput:null,
-                upload:function(){
+                fileTypes:[],
+                filename:"",
+                progress:0,
+                inprogress:false,
+                openUpload:function(){
                     $scope.vm.fileInput.click();
                 },
-                uploadChange:function(f){
-                    $scope.upload(f);
+                change:function(){
+                    $scope.upload({filename:$scope.vm.fileInput.value});
+                    $scope.vm.filename = $scope.vm.fileInput.value;
+                    $scope.vm.inprogress = true;
                 }
             }
 
             $scope.$watch("title",function(title){
                 $scope.vm.title = title;
+            });
+
+            $scope.$watch("fileTypes",function(types){
+                $scope.vm.fileTypes = types;
+            });
+
+            $scope.$watch("progress",function(progress){
+                $scope.vm.progress = progress;
+                if(progress == 100){
+                    $scope.vm.inprogress = false;
+                }
+            });
+
+            $scope.$watch("fileSize",function(fileSize){
+                $scope.vm.fileSize = fileSize;
             })
         },
         link:function($scope,element,attrs){
-            $scope.vm.fileInput = element[0].children[1];
+            $scope.vm.fileInput = element[0].children[2];
         }
     }
 })

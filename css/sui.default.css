@@ -1859,6 +1859,34 @@ max-height:20px;
         cursor:pointer;
 }
 
+.sui-nav-subnav-item a{
+    width: 100%;
+    background: #fff;
+    color: #000000;
+    border: none;
+    margin: 0px;
+    padding: 0px;
+}
+
+.sui-nav-subnav-item:hover a{
+    color: #000;
+    background:#e2e2e2;
+}
+
+.sui-nav-item:hover .sui-nav-subnav-item a{
+    width: 100%;
+    color: #000000;
+    border: none;
+}
+
+.sui-nav-subnav-item a:hover{
+    width: 100%;
+    background: #fff;
+    color: #000000;
+    border: none;
+    background:#e2e2e2;
+}
+
 .sui-crumbs-list {
     list-style: none;
 }
@@ -2053,6 +2081,9 @@ max-height:20px;
 
 .sui-uploader{
 
+}
+.sui-uploader{
+    width: 240px;
 }
 
 .sui-uploader-input{

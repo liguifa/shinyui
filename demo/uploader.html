@@ -13,7 +13,7 @@
 </head>
 <body ng-app="check" ng-controller="check.controller">
     <sui-line title="'按钮示例'"></sui-line>
-    <sui-uploader upload="vm.upload(filename)" title="'普通上传'" file-types="['mp3','docx','doc','mp4']" file-size="65535"></sui-uploader>
+    <sui-uploader upload="vm.upload(filename)" progress="vm.progress" title="'普通上传'" file-types="['mp3','docx','doc','mp4']" file-size="65535"></sui-uploader>
 
     <sui-line title="'示例代码'"></sui-line>
     <sui-code code='vm.code' style="height:400px;width:100%;margin-top: 10px;margin-bottom: 10px;">
@@ -50,8 +50,14 @@
     (function () {
         function check_controller($scope) {
             $scope.vm = {
+                progress:0,
                 upload:function(f){
                     alert(f);
+                    setInterval(function(){
+                        $scope.$apply(function(){
+                            $scope.vm.progress += 1;
+                        });
+                    },100);
                 }
             }
         }

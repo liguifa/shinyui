@@ -27,18 +27,37 @@
     <sui-line title="'示例代码'"></sui-line>
     <sui-code code='vm.code' style="height:400px;width:100%;margin-top: 10px;margin-bottom: 10px;">
         <pre><code class="language-javascript">
+    <sui-button text="vm.primary" ng-bind="primary='primary'" type="primary"></sui-button>
+    <sui-button text="vm.default" ng-bind="default='default'" type="default"></sui-button>
+    <sui-button text="vm.normal" ng-bind="normal='normal'" type="normal"></sui-button>
+    <sui-button text="vm.warm" ng-bind="warm='warm'" type="warm"></sui-button>
+    <sui-button text="vm.danger" ng-bind="danger='danger'" type="danger" ></sui-button>
+    <sui-button text="vm.disuibled" ng-bind="disuibled='disabled'" type="disabled"></sui-button>
+    <sui-button text="vm.default" ng-bind="big='big'" size="big"></sui-button>
+    <sui-button text="vm.default" ng-bind="defaule='defaule'" size="defaule"></sui-button>
+    <sui-button text="vm.default" ng-bind="small='small'" size="small"></sui-button>
+    <sui-button text="vm.default" ng-bind="mini='mini'" size="mini"></sui-button>
+
     (function () {
         function check_controller($scope) {
             $scope.vm = {
-                fields: [{ name: "文件名" }, { name: "文件大小" }, { name: "修改日期" }, { name: "文件类别" }, { name: "创建者" }, { name: "权限" }],
-                datas: [{ rows: { name: "123.txt", size: "17K", date: "12/12/2020", type: "txt", createBy: "Guifa Li", p: "读/写" } },
-                { rows: { name: "123.txt", size: "17K", date: "12/12/2020", type: "txt", createBy: "Guifa Li", p: "读/写" } },
-                { rows: { name: "123.txt", size: "17K", date: "12/12/2020", type: "txt", createBy: "Guifa Li", p: "读/写" } },
-                { rows: { name: "123.txt", size: "17K", date: "12/12/2020", type: "txt", createBy: "Guifa Li", p: "读/写" } },
-                { rows: { name: "123.txt", size: "17K", date: "12/12/2020", type: "txt", createBy: "Guifa Li", p: "读/写" } },
-                { rows: { name: "123.txt", size: "17K", date: "12/12/2020", type: "txt", createBy: "Guifa Li", p: "读/写" } },
-                { rows: { name: "123.txt", size: "17K", date: "12/12/2020", type: "txt", createBy: "Guifa Li", p: "读/写" } },
-                { rows: { name: "123.txt", size: "17K", date: "12/12/2020", type: "txt", createBy: "Guifa Li", p: "读/写" } }],
+                primary: "原始按钮",
+                default: "默认按钮",
+                normal: "百搭按钮",
+                warm:"暖色按钮",
+                danger:"警告按钮",
+                disabled: "禁用按钮",
+                disabled: true,
+                c: "https://www.baidu.com",
+                property: {
+                    fields: [{ name: "名称" }, { name: "类型" }, { name: "可选值" }, { name: "示例" }, { name: "默认值" }, { name: "意义" }],
+                    datas: [{ rows: { name: "text", type: "string", choose: "*", example: "原始按钮", default: "", commnet: "按钮标题" } },
+                        { rows: { name: "type", type: "string", choose: "primary:原始按钮,default:默认按钮,normal:百搭按钮,warm:暖色按钮,danger:警告按钮,disabled:禁用按钮", example: "default", default: "default", commnet: "按钮类型" } },
+                        { rows: { name: "size", type: "string", choose: "big:大,defaule:默认,small:小,mini:很小", example: "default", default: "default", commnet: "按钮大小" } },
+                        { rows: { name: "href", type: "string", choose: "*", example: "https://www.baidu.com", default: "", commnet: "点击按钮之后跳转的页面" } },
+                        { rows: { name: "disabled", type: "bool", choose: "true:可用,false:不可用", example: "true", default: "true", commnet: "按钮状态" } },
+                    ]
+                }
             }
         }
         angular.module("check", ["sqladmin"]).controller("check.controller", check_controller);
@@ -48,7 +67,7 @@
     <sui-line title="'按钮属性'"></sui-line>
     <sui-datagrid is-show-thead="true" is-show-tool="false" is-show-footer="false" fields="vm.property.fields" is-can-select="false" is-edit="false" datas="vm.property.datas"></sui-datagrid>
     <sui-line title="'按钮方法'"></sui-line>
-    <sui-datagrid is-show-thead="true" is-show-tool="false" is-show-footer="false" fields="vm.property.fields" is-can-select="false" is-edit="false" datas="vm.property.datas"></sui-datagrid>
+    <sui-datagrid is-show-thead="true" is-show-tool="false" is-show-footer="false" fields="vm.functions.fields" is-can-select="false" is-edit="false" datas="vm.functions.datas"></sui-datagrid>
 </body>
 </html>
 <script src="../script/lib/prism.js"></script>
@@ -75,6 +94,10 @@
                         { rows: { name: "href", type: "string", choose: "*", example: "https://www.baidu.com", default: "", commnet: "点击按钮之后跳转的页面" } },
                         { rows: { name: "disabled", type: "bool", choose: "true:可用,false:不可用", example: "true", default: "true", commnet: "按钮状态" } },
                     ]
+                },
+                functions:{
+                    fields:[{name:"名称"},{name:"参数"},{name:"意义"}],
+                    datas:[{rows:{name:"click",args:"",comment:""}}]
                 }
             }
         }
