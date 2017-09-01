@@ -2089,3 +2089,59 @@ max-height:20px;
 .sui-uploader-input{
     display: none;
 }
+
+.sui-window-div{
+    width: 392px;
+    height: 262px;
+        border: 1px solid rgba(0,0,0,.1);
+    box-shadow: 1px 1px 5px rgba(0,0,0,.2);
+        margin: 0;
+    padding: 0;
+    background-color: #f8f8f8;
+    -webkit-background-clip: content;
+     padding-right: 20px;
+}
+
+.sui-window-title{
+    width: 100%;
+    height: 43px;
+    background: #fff;
+}
+
+.sui-window-title-span{
+    line-height: 43px;
+    padding-left: 20px;
+    vertical-align: central;
+}
+
+.sui-window-icons{
+    list-style: none;
+    margin: 0px;
+    padding: 0px;
+    padding-right: -20px;
+}
+
+.sui-window-icon{
+    float: right;
+    height: 16px;
+    width: 16px;
+    margin-left: 10px;
+    cursor: pointer;
+    margin-top:13.5px;
+}
+
+.sui-window-icon-close{
+    background: url(../Images/icon.png) no-repeat;
+    background-position: 1px -40px;
+}
+
+.sui-window-icon-max{
+    background: url(../Images/icon.png) no-repeat;
+    background-position: -32px -40px;
+}
+
+.sui-window-context{
+    width: 100%;
+    background: #eee;
+    padding: 10px;
+}

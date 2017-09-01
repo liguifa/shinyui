@@ -2173,6 +2173,71 @@ angular.module("sqladmin", [])
     }
 })
 
+.directive("suiWindow",function(){
+    var vm = {
+        template:"<div class='sui-window-div'>\
+                    <div class='sui-window-title'>\
+                        <span class='sui-window-title-span'>{{vm.title}}</span>\
+                        <ui class='sui-window-icons'>\
+                            <li class='sui-window-icon sui-window-icon-close'></li>\
+                            <li class='sui-window-icon sui-window-icon-max' ng-click='vm.max()'></li>\
+                            <li class='sui-window-icon sui-window-icon-min'></li>\
+                        </ui>\
+                    </div>\
+                    <div class='sui-window-context'><div ng-transclude></div>\</div>\
+                  </div>",
+        mousedown: function ($event)
+        {
+            if ($event.target.className == 'sui-border') {
+                stamp.isMove = true;
+                stamp.mouse = { left: $event.clientX, top: $event.clientY };
+            }
+        },
+
+        mouseup: function ($event)
+        {
+            stamp.isMove = false;
+        },
+
+        move: function ($event)
+        {
+            if (stamp.isMove)
+            {
+                var suiWindow = document.getElementsByClassName('sui-window')[0];
+                var x = $event.clientX - stamp.mouse.left;
+                var y = $event.clientY - stamp.mouse.top;
+                suiWindow.style.left = suiWindow.offsetLeft + x + 'px';
+                suiWindow.style.top = suiWindow.offsetTop + y + 'px';
+                stamp.mouse = { left: $event.clientX, top: $event.clientY };
+            }
+        }
+    }
+    return {
+        restrict: "E",
+        template: vm.template,
+        replace: true,
+        priority: 1,
+        transclude:true,
+        scope: {
+            close:"&",
+        },
+        controller: function ($scope) {
+            $scope.vm = {
+                title:"Test",
+                content:"Test"
+            }
+        },
+        link:function($scope,element,attrs){
+            $scope.vm.max = function(){
+                 var height = document.body.clientHeight;
+                 var width = document.body.clientWidth-20;
+                 element[0].style.height = height + "px";
+                 element[0].style.width = width + "px";
+            }
+        }
+    }
+})
+
 .directive("suiLines", ["guid.service",function (guid) {
     var vm = {
         id:guid.newGuid(),
