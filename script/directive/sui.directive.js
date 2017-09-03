@@ -1,4 +1,4 @@
-angular.module("sqladmin", [])
+angular.module("shinyui", [])
 
 .directive("suiConnect", function ()
 {
@@ -863,7 +863,7 @@ angular.module("sqladmin", [])
 .directive("suiIcon",function ()
 {
     var vm = {
-        template: '<i class="{{icon_class}} sui-tool-icon" ng-click="vm.icon_click()"></i> '
+        template: '<i class="{{vm.icon_class}} sui-tool-icon" ng-click="vm.icon_click()"></i> '
     }
 
     return {
@@ -872,18 +872,20 @@ angular.module("sqladmin", [])
         replace: true,
         priority: 2,
         scope: {
-            type: "@",
+            type: "=",
             click:"&",
         },
         controller: function ($scope)
         {
-            $scope.icon_class = "sui-icon-" + $scope.type;
             $scope.vm = {
                 icon_click:function()
                 {
                     $scope.click();
                 }
             }
+            $scope.$watch("type",function(type){
+                $scope.vm.icon_class = "sui-icon-" + type;
+            })
         }
     }
 })
@@ -1324,6 +1326,7 @@ angular.module("sqladmin", [])
                 falseText: "False",
                 trueText: "True",
                 displayText: "False",
+                readonly:false,
             };
 
             $scope.$watch("vm.isCheck", function (isCheck) {
@@ -1332,7 +1335,9 @@ angular.module("sqladmin", [])
             });
 
             $scope.$watch("value",function(value){
-                $scope.vm.isCheck = value;
+                if(value != undefined){
+                    $scope.vm.isCheck = value;
+                }
             });
             $scope.$watch("readonly", function (readonly) {
                 $scope.vm.readonly = readonly;
@@ -1906,7 +1911,14 @@ angular.module("sqladmin", [])
 .directive("suiCrumbs", function () {
     var vm = {
         template: "<div class='sui-crumbs'>\
-                    <ul class='sui-crumbs-list'><li class='sui-crumbs-item' ng-repeat='item in vm.items'><a class='sui-crumbs-text' href='{{item.url}}'>{{item.title}}</a></li></ul>\
+                    <ul class='sui-crumbs-list'>\
+                        <li class='sui-crumbs-item' ng-repeat='item in vm.items'>\
+                            <a class='sui-crumbs-text' href='{{item.url}}' ng-if='!$last'>{{item.title}}</a>\
+                            <span class='sui-crumbs-text' ng-if='$last'>{{item.title}}</span>\
+                            <i ng-if='!$last'>{{vm.separator}}</i>\
+                        </li>\
+                    </ul>\
+                    <div class='sui-clear'></div>\
                    </div>"
     }
     return {
@@ -1916,14 +1928,20 @@ angular.module("sqladmin", [])
         priority: 1,
         scope: {
             items:"=",
+            separator:"="
         },
         controller: function ($scope) {
             $scope.vm = {
-                items: []
+                items: [],
+                separator:">"
             };
             $scope.$watch("items", function (items) {
                 $scope.vm.items = items;
             }, true);
+
+            $scope.$watch("separator",function(separator){
+                $scope.vm.separator = separator;
+            });
         }
     }
 })
@@ -2234,6 +2252,134 @@ angular.module("sqladmin", [])
                  element[0].style.height = height + "px";
                  element[0].style.width = width + "px";
             }
+        }
+    }
+})
+
+.directive("suiPanel",function(){
+    var vm = {
+        template:"<div class='sui-panel'>\
+                    <div class='sui-panel-title' ng-click='vm.fold()'><span>{{vm.title}}</span><sui-icon class='sui-panel-title-icon' type='vm.icon'></sui-icon></div>\
+                    <div class='sui-panel-content' ng-if='vm.isShowContent'><div class='sui-panel-content-div' ng-transclude></div></div>\
+                  </div>"
+    }
+
+    return {
+        restrict: "E",
+        template: vm.template,
+        replace: true,
+        priority: 1,
+        transclude:true,
+        scope: {
+           title:"="
+        },
+        controller:function($scope){
+            $scope.vm = {
+                title:"",
+                isShowContent:false,
+                icon:"fold-bottom",
+                fold:function(){
+                    $scope.vm.isShowContent = !$scope.vm.isShowContent;
+                    $scope.vm.icon = $scope.vm.isShowContent?"fold-top":"fold-bottom";
+                }
+            }
+
+            $scope.$watch("title",function(title){
+                $scope.vm.title = title;
+            })
+        }
+    }
+})
+
+.directive("suiAvatar",function(){
+    var vm = {
+        template:"<div class='sui-avatar'>\
+                    <img class='sui-avatar-image' src='{{vm.src}}' />\
+                    <div ng-if='vm.number>0' class='sui-avatar-number'>{{vm.number}}</div>\
+                  </div>"
+    }
+
+    return {
+        restrict: "E",
+        template: vm.template,
+        replace: true,
+        priority: 1,
+        transclude:true,
+        scope: {
+           src:"=",
+           number:"=",
+        },
+        controller:function($scope){
+            $scope.vm = {
+                src:"",
+                number:0
+            }
+
+            $scope.$watch("src",function(src){
+                $scope.vm.src = src;
+            });
+
+            $scope.$watch("number",function(number){
+                $scope.vm.number = number;
+            });
+        }
+    }
+})
+
+.directive("suiCard",function(){
+    var stamp = {
+        isMove: false,
+        mouse: { left: 0, top: 0 }
+    }
+    var vm = {
+        template:"<div class='sui-card'>\
+                    <div class='sui-card-title sui-noselect' ng-mousedown='vm.mousedown($event)' ng-mousemove='vm.move($event)' ng-mouseup='vm.mouseup($event)'><span>{{vm.title}}</span></div>\
+                    <div class='sui-card-content' ng-transclude></div>\
+                  </div>",
+        mousedown: function ($event)
+        {
+                stamp.isMove = true;
+                stamp.mouse = { left: $event.clientX, top: $event.clientY };
+        },
+
+        mouseup: function ($event)
+        {
+            stamp.isMove = false;
+        },
+
+        move: function ($event)
+        {
+            if (stamp.isMove)
+            {
+                var suiWindow = document.getElementsByClassName('sui-card')[0];
+                var x = $event.clientX - stamp.mouse.left;
+                var y = $event.clientY - stamp.mouse.top;
+                suiWindow.style.left = suiWindow.offsetLeft + x + 'px';
+                suiWindow.style.top = suiWindow.offsetTop + y + 'px';
+                stamp.mouse = { left: $event.clientX, top: $event.clientY };
+            }
+        }
+    }
+    return {
+        restrict: "E",
+        template: vm.template,
+        replace: true,
+        priority: 1,
+        transclude:true,
+        scope: {
+           title:"="
+        },
+        controller:function($scope){
+            $scope.vm = {
+                title:"",
+                mousedown: vm.mousedown,
+                move: vm.move,
+                mouseup: vm.mouseup,
+            }
+
+            $scope.$watch("title",function(title){
+                $scope.vm.title = title;
+            })
         }
     }
 })
