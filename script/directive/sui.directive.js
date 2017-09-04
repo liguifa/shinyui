@@ -1090,7 +1090,7 @@ angular.module("shinyui", [])
 .directive("suiCalendar", function () {
     var vm = {
         template: "<div class='sui-calendar'>\
-                    <div><input class='sui-calendar-text' type='text' readonly ng-model='vm.time' /><div class='sui-calendar-icon' ng-click='vm.startSelect()' ><img src='/Static/Images/icon_calendar.png' /></div></div>\
+                    <div><input class='sui-calendar-text' type='text' readonly ng-model='vm.time' /><div class='sui-calendar-icon' ng-click='vm.startSelect()' ><img src='../Images/icon_calendar.png' /></div></div>\
                     <div class='sui-calendar-select' ng-if='vm.isSelect'>\
                         <div class='sui-calendar-select-title'><div class='sui-calendar-select-title-span'><div class='sui-icon-left sui-calendar-select-title-span-left' ng-click='vm.bottomMonth()'></div><div class='sui-calendar-select-title-text'>{{vm.year}}年 {{vm.month}}月</div><div class='sui-icon-right sui-calendar-select-title-span-right' ng-click='vm.topMonth()'></div></div></div>\
                         <div class='sui-calendar-select-context'>\
@@ -1226,15 +1226,17 @@ angular.module("shinyui", [])
             })
 
             $scope.$watch("text", function (text) {
-                var date = new Date(text);
-                $scope.vm.calendars = vm.getDateCalendar(date.getFullYear(), date.getMonth());
-                $scope.vm.year = date.getFullYear();
-                $scope.vm.month = date.getMonth() + 1;
-                $scope.vm.day = date.getDate();
-                $scope.vm.hour = date.getHours();
-                $scope.vm.minute = date.getMinutes();
-                $scope.vm.second = date.getSeconds();
-                $scope.vm.time = date.toString();
+                if(text){
+                    var date = new Date(text);
+                    $scope.vm.calendars = vm.getDateCalendar(date.getFullYear(), date.getMonth());
+                    $scope.vm.year = date.getFullYear();
+                    $scope.vm.month = date.getMonth() + 1;
+                    $scope.vm.day = date.getDate();
+                    $scope.vm.hour = date.getHours();
+                    $scope.vm.minute = date.getMinutes();
+                    $scope.vm.second = date.getSeconds();
+                    $scope.vm.time = date.toString();
+                }
             })
         }
     }
@@ -1762,9 +1764,9 @@ angular.module("shinyui", [])
     }
 }])
 
-.directive("suiMessuigebar",function(){
+.directive("suiMessagebar",function(){
     var vm = {
-        template: "<div class='sui-messuigebar'><span>{{vm.messuige}}</span><i>×</i></div>"
+        template: "<div class='sui-messagebar'><span>{{vm.message}}</span><i>×</i></div>"
     }
     return {
         restrict: "E",
@@ -1772,14 +1774,14 @@ angular.module("shinyui", [])
         replace: true,
         priority: 1,
         scope: {
-            messuige: "="
+            message: "="
         },
         controller: function ($scope) {
             $scope.vm = {
-                messuige: "",
+                message: "",
             }
-            $scope.$watch("messuige", function (messuige) {
-                $scope.vm.messuige = messuige;
+            $scope.$watch("message", function (message) {
+                $scope.vm.message = message;
             })
         }
     }
@@ -1854,6 +1856,7 @@ angular.module("shinyui", [])
                             </div>\
                         </li>\
                     </ul>\
+                    <div class='sui-nav-custom' ng-transclude></div>\
                    </div>"
     }
 
@@ -1862,6 +1865,7 @@ angular.module("shinyui", [])
         template: vm.template,
         replace: true,
         priority: 1,
+        transclude:true,
         scope: {
             navs: "=",
             icon: "=",
@@ -2293,7 +2297,7 @@ angular.module("shinyui", [])
 
 .directive("suiAvatar",function(){
     var vm = {
-        template:"<div class='sui-avatar'>\
+        template:"<div class='sui-avatar' ng-click='vm.click()'>\
                     <img class='sui-avatar-image' src='{{vm.src}}' />\
                     <div ng-if='vm.number>0' class='sui-avatar-number'>{{vm.number}}</div>\
                   </div>"
@@ -2308,11 +2312,15 @@ angular.module("shinyui", [])
         scope: {
            src:"=",
            number:"=",
+           href:"=",
         },
         controller:function($scope){
             $scope.vm = {
                 src:"",
-                number:0
+                number:0,
+                click:function(){
+                    window.open($scope.href);
+                }
             }
 
             $scope.$watch("src",function(src){
@@ -2329,7 +2337,8 @@ angular.module("shinyui", [])
 .directive("suiCard",function(){
     var stamp = {
         isMove: false,
-        mouse: { left: 0, top: 0 }
+        mouse: { left: 0, top: 0 },
+        card:null
     }
     var vm = {
         template:"<div class='sui-card'>\
@@ -2347,11 +2356,10 @@ angular.module("shinyui", [])
             stamp.isMove = false;
         },
 
-        move: function ($event)
+        move: function ($event,suiWindow)
         {
             if (stamp.isMove)
             {
-                var suiWindow = document.getElementsByClassName('sui-card')[0];
                 var x = $event.clientX - stamp.mouse.left;
                 var y = $event.clientY - stamp.mouse.top;
                 suiWindow.style.left = suiWindow.offsetLeft + x + 'px';
@@ -2373,13 +2381,103 @@ angular.module("shinyui", [])
             $scope.vm = {
                 title:"",
                 mousedown: vm.mousedown,
-                move: vm.move,
+                move: function($event){
+                    vm.move($event,$scope.vm.card);
+                },
                 mouseup: vm.mouseup,
             }
 
             $scope.$watch("title",function(title){
                 $scope.vm.title = title;
             })
+        },
+        link:function($scope,element,attrs){
+            $scope.vm.card = element[0];
+        }
+    }
+})
+
+.directive("suiFixed",function(){
+    var vm = {
+        template:"<div class='sui-fixed' style='{{vm.position}}' ng-transclude>\</div>"
+    }
+    return {
+        restrict: "E",
+        template: vm.template,
+        replace: true,
+        priority: 1,
+        transclude:true,
+        scope: {
+            fixedTop:"=",
+            fixedBottom:"=",
+            fixedLeft:"=",
+            fixedRight:"="
+        },
+        controller:function($scope){
+            $scope.vm = {
+                position:"",
+            }
+
+            function buildPosition(){
+                var position = "";
+                if($scope.fixedTop != undefined){
+                    position += "top:"+$scope.fixedTop+"px;";
+                }
+                if($scope.fixedBottom != undefined){
+                    position += "bottom:"+$scope.fixedBottom+"px;";
+                }
+                if($scope.fixedLeft != undefined){
+                    position += "left:"+$scope.fixedLeft+"px;";
+                }
+                if($scope.fixedRight != undefined){
+                    position += "right:"+$scope.fixedRight+"px;";
+                }
+                $scope.vm.position = position;
+            }
+
+            $scope.$watch("fixedTop",buildPosition);
+            $scope.$watch("fixedBottom",buildPosition);
+            $scope.$watch("fixedLeft",buildPosition);
+            $scope.$watch("fixedRight",buildPosition);
+        }
+    }
+})
+
+.directive("suiTop",function(){
+    var vm  = {
+        template:"<div class='sui-top'>\
+                    <sui-fixed fixed-bottom='50' fixed-right='50'><sui-icon click='vm.top()' class='sui-top-content' type='vm.icon'></sui-icon></sui-fixed>\
+                  </div>"
+    }
+    return {
+        restrict: "E",
+        template: vm.template,
+        replace: true,
+        priority: 1,
+        transclude:true,
+        scope: {
+        },
+        controller:function($scope){
+            $scope.vm = {
+                icon:"fold-top",
+                scroll:(function(){
+                    var interval = window.setInterval(function(){
+                        var currentScroll = document.documentElement.scrollTop || document.body.scrollTop;
+                        if(currentScroll>0){
+                             window.scrollTo( 0, currentScroll - 10);
+                        } else {
+                            window.clearInterval(interval);
+                        }
+                    },24);
+                }),
+                top:function(){
+                    var currentScroll = document.documentElement.scrollTop || document.body.scrollTop;
+                    if(currentScroll>0){
+                        $scope.vm.scroll();
+                    }
+
+                }
+            }
         }
     }
 })

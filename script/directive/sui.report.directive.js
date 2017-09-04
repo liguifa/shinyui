@@ -1,4 +1,4 @@
-﻿angular.module("shinyui", [])
+﻿angular.module("shinyui.report", [])
 
 .directive("suiHistogram", function () {
     var vm = {
@@ -63,7 +63,7 @@
     }
 })
 
-.directive("suiLine", function () {
+.directive("suiLinechart", function () {
     var vm = {
         template: "<div><svg class='sui-report sui-report-histogram' width='{{vm.w}}px' height='{{vm.h}}px'>\
                     <text class='sui-report-histogram-text' x='{{vm.h/2}}' y='10'>{{vm.title}}</text>\

@@ -1759,7 +1759,7 @@ max-height:20px;
     margin: 0px;
 }
 
-.sui-messuigebar{
+.sui-messagebar{
     height: 25px;
     width: 100%;
     background: #DFF0D8;
@@ -1771,7 +1771,7 @@ max-height:20px;
     border: 1px solid transparent;
 }
 
-.sui-messuigebar i{
+.sui-messagebar i{
     float: right;
     height: 20px;
     width: 20px;
@@ -1793,6 +1793,14 @@ max-height:20px;
        
 }
 
+.sui-nav-custom{
+    float: right;
+    margin-right: 10px;
+    height: 55px;
+    line-height: 55px;
+    vertical-align: central;
+}
+
 .sui-nav-icon{
     width:116px;
     height:35px;
@@ -1804,6 +1812,7 @@ max-height:20px;
 .sui-nav-list{
     list-style:none;
     margin:0px;
+    float: left;
 }
 
 .sui-nav-item{
@@ -2203,6 +2212,7 @@ max-height:20px;
 .sui-avatar{
     width: 50px;
     height: 50px;
+    cursor: pointer;
 }
 
 .sui-avatar-image{
@@ -2252,4 +2262,20 @@ max-height:20px;
 .sui-card-content{
     margin: 0px;
     text-align: center;
+}
+
+.sui-fixed{
+    position: fixed;
+}
+
+.sui-top{
+    background: #fff;
+}
+
+.sui-top-content{
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    /*background: #ffffff;*/
+    border: 1px solid #e2e2e2;
 }
