@@ -34,14 +34,14 @@
         function index_controller($scope) {
             $scope.vm = {
                 navs: [
-                    {title:"控件",url:"https://www.baidu.com",isActive:true},
-                    {title:"方法",url:"https://www.baidu.com",isActive:false},
-                    {title:"弹出",url:"https://www.baidu.com",isActive:false}
+                    {title:"控件",url:"",isActive:true,isLink:true},
+                    {title:"方法",url:"functions/index.html",isActive:false,isLink:true},
+                    {title:"弹出",url:"demo/pop/index.html",isActive:false,isLink:true}
                 ], 
                 icon: "demo/images/logo.png",
                 name: "index_view",
                 sidenavs: [
-                	{title:"开发工具",subs:[{title:"调试预览"}]},
+                	// {title:"开发工具",subs:[{title:"调试预览"}]},
                     { title: "基本元素", subs: [{ title: "按钮组", url: "demo/button.html", target: "index_view", isActive: true }, { title: "导航", url: "demo/nav.html", target: "index_view", isActive: false }, { title: "面包屑", url: "demo/crumbs.html", target: "index_view", isActive: false },{ title: "区块", url: "demo/block.html", target: "index_view", isActive: false }, { title: "选项卡", url: "demo/tabs.html", target: "index_view", isActive: false }, { title: "进度条", url: "demo/progress.html", target: "index_view", isActive: false }, { url:"demo/panel.html", target:"index_view", title: "折叠面板", isActive: false }, { url: "demo/datagrid.html", target: "index_view", title: "基本表格", isActive: false }, { title: "简单铺助元素", url: "demo/basic.html", target: "index_view", isActive: false }] },
                     { title: "表单元素", subs: [{ title: "下拉框", url: "demo/combo_box.html", target: "index_view", isActive: false },{ title: "多选框", url: "demo/mulselect.html", target: "index_view", isActive: false },{title:"开关",url:"demo/switch.html",target:"index_view",isActive:false},{title:"复选框",url:"demo/check_box.html",target:"index_view",isActive:false},{title:"单选框",url:"demo/radio.html",target:"index_view",isActive:false},{title:"输入框",url:"demo/input.html",target:"index_view",isActive:false},{title:"数字框",url:"demo/number.html",target:"index_view",isActive:false},{title:"日期选择",url:"demo/calendar.html",target:"index_view",isActive:false}] },
                     { title: "组件元素", subs: [{ title: "文件上传", url: "demo/uploader.html", target: "index_view", isActive: false },{ title: "窗口", url: "demo/window.html", target: "index_view", isActive: false },{ title: "搜索框", url: "demo/search.html", target: "index_view", isActive: false },{ title: "头像", url: "demo/avatar.html", target: "index_view", isActive: false },{ title: "卡片", url: "demo/card.html", target: "index_view", isActive: false }] },

@@ -1,9 +1,14 @@
-﻿(function ()
-{
-    function messager_service(guid) {
-        var messuigeInfo = {
+﻿(function (){
+    function pop_service(guid) {
+        var messageInfo = {
             window: 280,
-            height: 162
+            height: 162,
+            notify:{
+                top_right:0,
+                top_left:0,
+                bottom_right:0,
+                bottom_left:0
+            }
         }
 
         function _window(content, winType) {
@@ -14,8 +19,8 @@
             alert.classList.add("messager-alert");
             alert.classList.add(winType);
             alert.id = alertId;
-            alert.style.top = (h - messuigeInfo.height) / 2 + "px";
-            alert.style.left = (w - messuigeInfo.window) / 2 + "px";
+            alert.style.top = (h - messageInfo.height) / 2 + "px";
+            alert.style.left = (w - messageInfo.window) / 2 + "px";
             alert.innerHTML = '<div class="messager-alert-title">信息</div><div class="messager-alert-content">' + content + '</div><div class="messuige-alert-tool"><button id="' + alertId + '_ok_btn">确定</button></div>';
             document.body.appendChild(alert);
             document.getElementById(alertId + "_ok_btn").onclick = function () {
@@ -55,22 +60,72 @@
             alert.classList.add("messager-alert");
             //alert.classList.add(winType);
             alert.id = alertId;
-            alert.style.top = (h - messuigeInfo.height) / 2 + "px";
-            alert.style.left = (w - messuigeInfo.window) / 2 + "px";
-            alert.innerHTML = '<div class="messager-alert-title">信息</div><div class="messager-alert-content">' + content + '</div><div class="messuige-alert-tool"><button id="' + alertId + '_ok_btn">确定</button></div>';
+            alert.style.top = (h - messageInfo.height) / 2 + "px";
+            alert.style.left = (w - messageInfo.window) / 2 + "px";
+            alert.innerHTML = '<div class="messager-alert-title">信息</div><div class="messager-alert-content">' + content + '</div><div class="message-alert-tool"><button id="' + alertId + '_ok_btn">确定</button></div>';
             document.body.appendChild(alert);
             document.getElementById(alertId + "_ok_btn").onclick = function () {
                 document.getElementById(alertId).remove();
                 func();
             }
         }
+        function _notify(type,posType,title,content){
+            var alertId = guid.newGuid();
+            var alert = document.createElement("div");
+            alert.id =alertId;
+            alert.classList.add("messager-notify");
+            _setNotifyPosition(posType,alert);
+            alert.setAttribute("pos-type",posType);
+            alert.innerHTML = "<div class='messager-notify-title'>"+title+"</div><div class='messager-notify-content'>"+content+"</div>";
+            document.body.appendChild(alert);
+            setTimeout(function(){
+                var element = document.getElementById(alertId);
+                var posTYpe = element.getAttribute("pos-type");
+                element.remove();
+                switch(posType){
+                    case 1:messageInfo.notify.top_left -= 1;break;
+                    case 2:messageInfo.notify.top_right -= 1;break;
+                    case 3:messageInfo.notify.bottom_right -= 1;break;
+                    case 4:messageInfo.notify.bottom_left -= 1;break;
+                }
+            },4500)
+        }
+        function _setNotifyPosition(posType,alert){
+            switch(posType){
+                case 1:{
+                    alert.style.top = messageInfo.notify.top_left*118 + 10 + "px";
+                    alert.style.left = "10px";
+                    essageInfo.notify.top_lef += 1;
+                    break;
+                }
+                case 2:{
+                    alert.style.top = messageInfo.notify.top_right*118 + 10 + "px";
+                    alert.style.right = "10px";
+                    messageInfo.notify.top_right += 1;
+                    break;
+                }
+                case 3:{
+                    alert.style.bottom = messageInfo.notify.bottom_right*118 + 10 + "px";
+                    alert.style.right = "10px";
+                    messageInfo.notify.bottom_right += 1;
+                    break;
+                }
+                case 4:{
+                    alert.style.bottom = messageInfo.notify.bottom_left*118 + 10 + "px";
+                    alert.style.left = "10px";
+                    messageInfo.notify.bottom_left += 1;
+                    break;
+                }
+            }
+        }
         return {
             alert: _alert,
             error: _error,
             loading: _loading,
-            confirm: _confirm
+            confirm: _confirm,
+            notify: _notify
         }
     }
 
-    angular.module("sqladmin").factory("messager.service", ["guid.service",messager_service]);
+    angular.module("pop",["shinyui"]).factory("pop.service", ["guid.service",pop_service]);
 })();

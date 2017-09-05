@@ -1,19 +1,22 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
-    <title></title>
-	<meta charset="utf-8" />
-    <link href="../css/sui.report.style.css" rel="stylesheet" />
-    <link href="../css/sui.default.css" rel="stylesheet" />
-    <link href="css/style.css" rel="stylesheet" />
+    <title>警告提示</title>
+    <meta charset="utf-8" />
+    <link href="../../css/prism.css" rel="stylesheet" />
+    <link href="../../css/sui.default.css" rel="stylesheet" />
+    <link href="../../css/sui.pop.style.css" rel="stylesheet" />
+        <link href="../css/style.css" rel="stylesheet" />
 </head>
-<body ng-app="demo" ng-controller="histogram.controller">
+<body ng-app="demo" ng-controller="demo.controller">
     <div class="demo-block">
-        <sui-line title="'示例'"></sui-line>
-        <sui-fan points="vm.points" r="600" title="'2017年大连平均温度'" dot-x="vm.dotX" dot-y="vm.dotY"></sui-fan>
+        <sui-line title="'按钮示例'"></sui-line>
+        <sui-button text="'错误提示'" type="'default'" click="vm.error()"></sui-button>
+        <sui-button text="'确认提示'" type="'default'" click="vm.confirm()"></sui-button>
+        <sui-button text="'警告提示'" type="'default'" click="vm.alert()"></sui-button>
     </div>
 
-<div class="demo-block">
+    <div class="demo-block">
         <sui-line title="'代码'"></sui-line>
         <div class='demo-code'><xmp><sui-uploader upload="vm.upload(filename)" progress="vm.progress" title="'普通上传'" file-types="['mp3','docx','doc','mp4']" file-size="65535"></sui-uploader></xmp></div>
     </div>
@@ -38,17 +41,16 @@
    </div>
 </body>
 </html>
-<script src="../script/lib/angular.min.js"></script>
-<script src="../script/directive/sui.report.directive.js"></script>
-<script src="../script/directive/sui.directive.js"></script>
-<script src="../script/common/guid.service.js"></script>
+<script src="../../script/lib/prism.js"></script>
+<script src="../../script/lib/angular.min.js"></script>
+<script src="../../script/directive/sui.directive.js"></script>
+<script src="../../script/common/guid.service.js"></script>
+<script src="../../script/common/pop.service.js"></script>
+
 <script>
     (function () {
-        function histogram_controller($scope) {
+        function demo_controller($scope,pop) {
             $scope.vm = {
-                points: [{title:"Guifa LI",weight:0.4},{title:"Huazhu Wang", weight:0.21},{title:"Huan Qi",weight:0.18},{title:"Ye Qiu",weight:0.1},{title:"Qiang Cheng",weight:0.09},{title:"XianHe Liu",weight:0.02}],
-                dotX:["1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月"],
-                dotY:[-10,-5,0,5,10,15,20,25,30,35],
                 property: {
                     fields: [{ name: "名称" }, { name: "类型" }, { name: "可选值" }, { name: "示例" }, { name: "默认值" }, { name: "意义" }],
                     datas: [{ rows: { name: "text", type: "string", choose: "*", example: "原始按钮", default: "", commnet: "按钮标题" } },
@@ -61,10 +63,20 @@
                 functions:{
                     fields:[{name:"名称"},{name:"参数"},{name:"意义"}],
                     datas:[{rows:{name:"click",args:"",comment:""}}]
+                },
+                error:function(){
+                    pop.error("An error has occurred in the pop.");
+                },
+                confirm:function(){
+                    pop.confirm("太阳从西边出来？",function(){
+                        return true;
+                    });
+                },
+                alert:function(){
+                    pop.alert("这是一个提示框!");
                 }
-            };
+            }
         }
-
-        angular.module("demo", ["shinyui.report","shinyui"]).controller("histogram.controller", histogram_controller);
+        angular.module("demo", ["shinyui","pop"]).controller("demo.controller", ["$scope","pop.service",demo_controller]);
     })();
 </script>

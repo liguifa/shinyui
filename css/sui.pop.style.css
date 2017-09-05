@@ -66,14 +66,14 @@
     text-indent:2em;
 }
 
-.messuige-alert-tool {
+.message-alert-tool {
     padding: 10px 20px 0px 20px;
     background: #ffffff;
     height: 40px;
     width: 100%;
 }
 
-    .messuige-alert-tool button {
+    .message-alert-tool button {
         background: #065999;
         border: none;
         color: #fff;
@@ -177,6 +177,38 @@
 		-ms-animation-delay: 1.22s;
 		-webkit-animation-delay: 1.22s;
 		-moz-animation-delay: 1.22s;
+}
+
+.messager-notify{
+	    padding: 16px;
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.2);
+    background: #fff;
+    line-height: 1.5;
+    position: fixed;
+    margin-bottom: 10px;
+    overflow: hidden;
+	width: 303px;
+	height: 76px;
+	padding: 16px;
+	text-overflow:ellipsis;
+}
+
+.messager-notify-title{
+	    font-size: 14px;
+    color: rgba(0,0,0,.85);
+    margin-bottom: 4px;
+    line-height: 20px;
+    display: inline-block;
+	height: 20px;
+}
+
+.messager-notify-content{
+	color: #666;
+	font-size: 12px;
+	text-overflow:ellipsis;
+	height: 56px;
+	overflow:hidden
 }
 
 
