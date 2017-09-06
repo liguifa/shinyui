@@ -133,6 +133,15 @@ body,html,document {
     -webkit-box-sizing: border-box !important;
     -moz-box-sizing: border-box !important;
     box-sizing: border-box !important;
+    line-height: 38px;
+}
+
+.sui-button-icon{
+    float: left;
+    height: 20px;
+    width: 20px;
+    margin-left: -12px;
+    margin-top:5px;
 }
 
 .sui-button-primary{

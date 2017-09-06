@@ -6,6 +6,7 @@
     <link href="../css/prism.css" rel="stylesheet" />
     <link href="../css/sui.icon.css" rel="stylesheet" />
     <link href="../css/sui.default.css" rel="stylesheet" />
+     <link href="../css/sui.icon.css" rel="stylesheet" />
     <link href="css/style.css" rel="stylesheet" />
 </head>
 <body ng-app="demo" ng-controller="demo.controller">
@@ -21,6 +22,7 @@
         <sui-button text="vm.default" ng-bind="defaule='defaule'" size="defaule"></sui-button>
         <sui-button text="vm.default" ng-bind="small='small'" size="small"></sui-button>
         <sui-button text="vm.default" ng-bind="mini='mini'" size="mini"></sui-button>
+        <sui-button text="'下载'" icon="'download'" type="'default'"></sui-button>
     </div>
 
     <div class="demo-block">
@@ -53,7 +55,9 @@
 <script src="../script/lib/prism.js"></script>
 <script src="../script/lib/angular.min.js"></script>
 <script src="../script/directive/sui.directive.js"></script>
+<script src="../script/directive/sui.icon.directive.js"></script>
 <script src="../script/common/guid.service.js"></script>
+<script src="../script/common/sui.icon.js"></script>
 <script>
     (function () {
         function demo_controller($scope) {
@@ -81,6 +85,6 @@
                 }
             }
         }
-        angular.module("demo", ["shinyui"]).controller("demo.controller", demo_controller);
+        angular.module("demo", ["shinyui","shinyui.icon"]).controller("demo.controller", demo_controller);
     })();
 </script>

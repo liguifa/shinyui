@@ -859,37 +859,6 @@ angular.module("shinyui", [])
     }
 })
 
-
-.directive("suiIcon",function ()
-{
-    var vm = {
-        template: '<i class="{{vm.icon_class}} sui-tool-icon" ng-click="vm.icon_click()"></i> '
-    }
-
-    return {
-        restrict: "E",
-        template: vm.template,
-        replace: true,
-        priority: 2,
-        scope: {
-            type: "=",
-            click:"&",
-        },
-        controller: function ($scope)
-        {
-            $scope.vm = {
-                icon_click:function()
-                {
-                    $scope.click();
-                }
-            }
-            $scope.$watch("type",function(type){
-                $scope.vm.icon_class = "sui-icon-" + type;
-            })
-        }
-    }
-})
-
 .directive("suiPagination", function ()
 {
     var vm = {
@@ -1789,7 +1758,9 @@ angular.module("shinyui", [])
 
 .directive("suiButton", function () {
     var vm = {
-        template: "<button class='sui-button {{vm.type}} {{vm.size}}' ng-click='vm.btn_click()'>{{vm.text}}</button>"
+        template: "<div>\
+                    <button class='sui-button {{vm.type}} {{vm.size}}' ng-click='vm.btn_click()'><sui-icon class='sui-button-icon' ng-if='vm.icon' type='vm.icon'></sui-icon><span>{{vm.text}}</span></button>\
+                   </div>"
     }
 
     return {
@@ -1803,13 +1774,15 @@ angular.module("shinyui", [])
             disabled: "=",
             size: "=",
             href: "=",
-            click:"&"
+            click:"&",
+            icon:"="
         },
         controller: function ($scope) {
             $scope.vm = {
                 text: "",
                 type: "default",
                 size: "defaule",
+                icon:false,
                 btn_click: function () {
                     if ($scope.href && $scope.href != "") {
                         window.open($scope.href);
@@ -1833,6 +1806,9 @@ angular.module("shinyui", [])
             });
             $scope.$watch("size", function (size) {
                 $scope.vm.size = "sui-button-" + size;
+            });
+            $scope.$watch("icon",function(icon){
+                $scope.vm.icon = icon;
             });
         }
     }
@@ -2459,7 +2435,7 @@ angular.module("shinyui", [])
         },
         controller:function($scope){
             $scope.vm = {
-                icon:"fold-top",
+                icon:"up_han",
                 scroll:(function(){
                     var interval = window.setInterval(function(){
                         var currentScroll = document.documentElement.scrollTop || document.body.scrollTop;
