@@ -2401,35 +2401,39 @@ max-height:20px;
     width: 8px;
     text-align: center;
     line-height: 8px;
-    font-size: 4px;
+    font-size: 8px;
 }
 
 .sui-timeline-list-item-title-icon-success{
-     height: 14px;
-    width: 14px;
+    border:none;
 }
 
 .sui-timeline-list-item-title-icon-success i{
-    height: 0px;
-    width: 0px;
+    height: 12px;
+    width: 12px;
     text-align: center;
-    line-height: 8px;
+    line-height: 12px;
     color: #5FB878;
-    font-size: 4px;
+    font-size: 16px;
     text-align: center;
-    margin-left: -8px;
+    margin-left: 0px;
+    margin-top:4px;
 }
 
 .sui-timeline-list-item-title-icon-error{
-     border: 2px solid #f04134;
+     border:none;
 }
 
 .sui-timeline-list-item-title-icon-error i{
-    height: 8px;
-    width: 8px;
+    height: 12px;
+    width: 12px;
     text-align: center;
-    line-height: 8px;
-    color: #5FB878;
+    line-height: 12px;
+    color: #f04134;
+    font-size: 16px;
+    text-align: center;
+    margin-left: 1px;
+    margin-top:4px;
 }
 
 .sui-timeline-list-item-detailed{

@@ -2566,11 +2566,18 @@ angular.module("shinyui", [])
         template:"<div class='sui-timeline'>\
                     <ul class='sui-timeline-list'>\
                         <li class='sui-timeline-list-item' ng-repeat='item in vm.items'>\
-                            <div class='sui-timeline-list-item-title'><div ng-class='{\"true\":\"sui-timeline-list-item-title-icon sui-timeline-list-item-title-icon-success\",\"false\":\"sui-timeline-list-item-title-icon sui-timeline-list-item-title-icon-error\"}[vm.isSuccess || !vm.isIcon]'><sui-icon ng-if='item.isIcon' type='item.icon'></sui-icon></div><span>{{item.title}}<span></div>\
+                            <div class='sui-timeline-list-item-title'><div class='{{item.style}}'><sui-icon ng-if='item.isIcon' type='item.icon'></sui-icon></div><span>{{item.title}}<span></div>\
                             <div class='sui-timeline-list-item-detailed'>{{item.detailed}}</div>\
                         </li>\
                     </ul>\
-                  </div>"
+                  </div>",
+        getStyle: function (status) {
+            switch (status) {
+                case 0: return "sui-timeline-list-item-title-icon"; break;
+                case 1: return "sui-timeline-list-item-title-icon sui-timeline-list-item-title-icon-success"; break;
+                case 2: return "sui-timeline-list-item-title-icon sui-timeline-list-item-title-icon-error"; break;
+            }
+        }
     }   
     return {
         restrict: "E",
@@ -2583,18 +2590,21 @@ angular.module("shinyui", [])
         },
         controller:function($scope){
             $scope.vm = {
-                items:[],
+                items: [],
             }
 
             $scope.$watch("items",function(items){
-                $scope.vm.items = items.map(function(item){
+                $scope.vm.items = items.map(function (item) {
+                    item.style = vm.getStyle(0);
                     if(item.isSuccess){
                         item.isIcon = true;
                         item.icon = 'o';
+                        item.style = vm.getStyle(1);
                     } 
                     if(item.isError){
                         item.isIcon = true;
                         item.icon = 'cance';
+                        item.style = vm.getStyle(2);
                     }
                     return item;
                 });
