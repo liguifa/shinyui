@@ -2458,6 +2458,151 @@ angular.module("shinyui", [])
     }
 })
 
+.directive("suiCarousel",function(){
+    var vm = {
+        template:"<div class='sui-carousel'>\
+                    <ul class='sui-carousel-list' style='width:{{vm.width*2*vm.items.length}}px;left:{{vm.left}}px;'>\
+                        <li class='sui-carousel-list-item' style='width:{{vm.width}}px;' ng-repeat='item in vm.items'><img class='sui-carousel-list-item-img' title='{{item.title}}' src='{{item.src}}' /></li>\
+                        <li class='sui-carousel-list-item' style='width:{{vm.width}}px;' ng-repeat='item in vm.items'><img class='sui-carousel-list-item-img' title='{{item.title}}' src='{{item.src}}' /></li>\
+                    </ul>\
+                    <div class='sui-carousel-title'></div>\
+                    <ul class='sui-carousel-points'>\
+                        <li class='sui-carousel-points-point' ng-repeat='item in vm.items' ng-click='vm.switch(item)'><div ng-class='{\"sui-carousel-points-point-dot-active\":vm.active == item.index}' class='sui-carousel-points-point-dot'></div></li>\
+                    </ul>\
+                  </div>"
+    }
+    return {
+        restrict: "E",
+        template: vm.template,
+        replace: true,
+        priority: 1,
+        transclude:true,
+        scope: {
+            items:"=",
+            speed:"="
+        },
+        controller:function($scope){
+            $scope.vm = {
+                items:[],
+                width:0,
+                left:0,
+                speed:6,
+                active:0,
+                switch_interval:false,
+                clear_move:function(){
+                    if($scope.vm.switch_interval){
+                        clearInterval($scope.vm.switch_interval);
+                        $scope.vm.switch_interval = false;
+                    }
+                },
+                start_move:function(){
+                    $scope.vm.clear_move();
+                    $scope.vm.switch_interval = window.setInterval(function(){
+                        var move_width = 0;
+                        var move_interval = window.setInterval(function(){
+                            $scope.$apply(function(){
+                                var list_width = $scope.vm.width * $scope.vm.items.length;
+                                if(move_width >= $scope.vm.width){
+                                    clearInterval(move_interval);
+                                    move_width = 0;
+                                    $scope.vm.active ++;
+                                    if($scope.vm.active >= $scope.vm.items.length){
+                                        $scope.vm.active = 0;
+                                    }
+                                    //纠正偏差
+                                    var current_left = $scope.vm.active * $scope.vm.width;
+                                    $scope.vm.left = 0 - current_left;
+                                } else {
+                                    $scope.vm.left -= 1;
+                                    move_width += 1;
+                                }
+                                if(0-list_width > $scope.vm.left){
+                                    $scope.vm.left = 0;
+                                }
+                            });
+                        },1)
+                    },$scope.vm.speed * 1000);
+                },
+                switch:function(item){
+                    var target_left = 0 - item.index * $scope.vm.width;
+                    $scope.vm.active = item.index;
+                    $scope.vm.clear_move();
+                    var move_interval = window.setInterval(function(){
+                        $scope.$apply(function(){
+                            if(target_left == $scope.vm.left){
+                                clearInterval(move_interval);
+                            } else {
+                                $scope.vm.left = $scope.vm.left > target_left ? $scope.vm.left - 1 : $scope.vm.left + 1;
+                            }
+                        });
+                    },0.5);
+                    $scope.vm.start_move();
+                }
+            }
+
+            $scope.$watch("speed",function(speed){
+                if(speed){
+                    $scope.vm.speed = speed;
+                }
+            });
+
+            $scope.$watch("items",function(items){
+                var index = 0;
+                $scope.vm.items = items.map(function(item){
+                    item.index = index++; 
+                    return item;
+                });
+                $scope.vm.start_move();
+            });
+        },
+        link:function($scope,elements,attrs){
+            $scope.vm.width = elements[0].clientWidth;
+        }
+    }
+})
+
+.directive("suiTimeline",function(){
+    var vm = {
+        template:"<div class='sui-timeline'>\
+                    <ul class='sui-timeline-list'>\
+                        <li class='sui-timeline-list-item' ng-repeat='item in vm.items'>\
+                            <div class='sui-timeline-list-item-title'><div ng-class='{\"true\":\"sui-timeline-list-item-title-icon sui-timeline-list-item-title-icon-success\",\"false\":\"sui-timeline-list-item-title-icon sui-timeline-list-item-title-icon-error\"}[vm.isSuccess || !vm.isIcon]'><sui-icon ng-if='item.isIcon' type='item.icon'></sui-icon></div><span>{{item.title}}<span></div>\
+                            <div class='sui-timeline-list-item-detailed'>{{item.detailed}}</div>\
+                        </li>\
+                    </ul>\
+                  </div>"
+    }   
+    return {
+        restrict: "E",
+        template: vm.template,
+        replace: true,
+        priority: 1,
+        transclude:true,
+        scope: {
+            items:"=",
+        },
+        controller:function($scope){
+            $scope.vm = {
+                items:[],
+            }
+
+            $scope.$watch("items",function(items){
+                $scope.vm.items = items.map(function(item){
+                    if(item.isSuccess){
+                        item.isIcon = true;
+                        item.icon = 'o';
+                    } 
+                    if(item.isError){
+                        item.isIcon = true;
+                        item.icon = 'cance';
+                    }
+                    return item;
+                });
+            },true);
+        }
+    }
+})
+
 .directive("suiLines", ["guid.service",function (guid) {
     var vm = {
         id:guid.newGuid(),
