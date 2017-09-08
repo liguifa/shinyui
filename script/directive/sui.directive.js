@@ -2573,9 +2573,9 @@ angular.module("shinyui", [])
                   </div>",
         getStyle: function (status) {
             switch (status) {
-                case 0: return "sui-timeline-list-item-title-icon"; break;
-                case 1: return "sui-timeline-list-item-title-icon sui-timeline-list-item-title-icon-success"; break;
-                case 2: return "sui-timeline-list-item-title-icon sui-timeline-list-item-title-icon-error"; break;
+                case 0: return "sui-timeline-list-item-title-icon"; 
+                case 1: return "sui-timeline-list-item-title-icon sui-timeline-list-item-title-icon-success";
+                case 2: return "sui-timeline-list-item-title-icon sui-timeline-list-item-title-icon-error";
             }
         }
     }   
@@ -2606,6 +2606,44 @@ angular.module("shinyui", [])
                         item.icon = 'cance';
                         item.style = vm.getStyle(2);
                     }
+                    return item;
+                });
+            },true);
+        }
+    }
+})
+
+.directive("suiSteps",function(){
+    var vm = {
+        template:"<div class='sui-steps'>\
+                    <ul class='sui-steps-list'>\
+                        <li class='sui-steps-list-step' ng-repeat='item in vm.items'>\
+                            <div class='sui-steps-list-step-icon'><span>{{item.index}}</span></div>\
+                            <fieldset class='sui-steps-list-step-line'><legend class='sui-steps-list-step-line-title'>{{item.title}}</legend></fieldset>\
+                            <div class='sui-steps-list-step-description'>{{item.description}}</div>\
+                        </li>\
+                    </ul>\
+                    <div class='sui-clear'></div>\
+                  </div>"
+    }
+    return {
+        restrict: "E",
+        template: vm.template,
+        replace: true,
+        priority: 1,
+        transclude:true,
+        scope: {
+            items:"=",
+        },
+        controller:function($scope){
+            $scope.vm = {
+                items:[],
+            }
+
+            $scope.$watch("items",function(items){
+                var index = 1;
+                $scope.vm.items = items.map(function(item){
+                    item.index = index ++ ;
                     return item;
                 });
             },true);

@@ -4,16 +4,34 @@
     <title>警告提示</title>
     <meta charset="utf-8" />
     <link href="../../css/prism.css" rel="stylesheet" />
+    <link href="../../css/sui.icon.css" rel="stylesheet" />
     <link href="../../css/sui.default.css" rel="stylesheet" />
     <link href="../../css/sui.pop.style.css" rel="stylesheet" />
-        <link href="../css/style.css" rel="stylesheet" />
+    <link href="../css/style.css" rel="stylesheet" />
+    <style>
+        ul{
+            list-style: none;
+            margin: 0px;
+            padding: 0px;
+        }
+
+        li{
+            float: left;
+            margin: 5px;
+        }
+    </style>
 </head>
 <body ng-app="demo" ng-controller="demo.controller">
     <div class="demo-block">
         <sui-line title="'按钮示例'"></sui-line>
-        <sui-button text="'错误提示'" type="'default'" click="vm.error()"></sui-button>
-        <sui-button text="'确认提示'" type="'default'" click="vm.confirm()"></sui-button>
-        <sui-button text="'警告提示'" type="'default'" click="vm.alert()"></sui-button>
+        <ul>
+            <li><sui-button text="'错误提示'" type="'danger'" click="vm.error()"></sui-button></li>
+            <li><sui-button text="'确认提示'" type="'normal'" click="vm.confirm()"></sui-button></li>
+            <li><sui-button text="'警告提示'" type="'warm'" click="vm.alert()"></sui-button></li>
+            <li><sui-button text="'信息提示'" type="'warm'" click="vm.info()"></sui-button></li>
+            <li><sui-button text="'成功提示'" type="'warm'" click="vm.success()"></sui-button></li>
+        </ul>
+        <div class="sui-clear"></div>
     </div>
 
     <div class="demo-block">
@@ -65,7 +83,7 @@
                     datas:[{rows:{name:"click",args:"",comment:""}}]
                 },
                 error:function(){
-                    pop.error("An error has occurred in the pop.");
+                    pop.error("用户尚未登录或者登录超时,请使用系统密钥，避免超时断线,如果已经插入系统密钥，请检查密钥是否是您企业的密钥.");
                 },
                 confirm:function(){
                     pop.confirm("太阳从西边出来？",function(){

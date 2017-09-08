@@ -1,14 +1,17 @@
 ﻿(function (){
     function pop_service(guid) {
         var messageInfo = {
-            window: 280,
-            height: 162,
+            width: 570,
+            height: 300,
             notify:{
                 top_right:0,
                 top_left:0,
                 bottom_right:0,
                 bottom_left:0
-            }
+            },
+            icons:[
+                {}
+            ]
         }
 
         function _window(content, winType) {
@@ -20,8 +23,8 @@
             alert.classList.add(winType);
             alert.id = alertId;
             alert.style.top = (h - messageInfo.height) / 2 + "px";
-            alert.style.left = (w - messageInfo.window) / 2 + "px";
-            alert.innerHTML = '<div class="messager-alert-title">信息</div><div class="messager-alert-content">' + content + '</div><div class="messuige-alert-tool"><button id="' + alertId + '_ok_btn">确定</button></div>';
+            alert.style.left = (w - messageInfo.width) / 2 + "px";
+            alert.innerHTML = '<div class="messager-alert-title">信息</div><div class="messager-alert-content"><div><i class="sui-icon">&#xe81b;</i></div>' + content + '</div><div class="message-alert-tool"><button id="' + alertId + '_ok_btn" class="sui-button">确定</button></div>';
             document.body.appendChild(alert);
             document.getElementById(alertId + "_ok_btn").onclick = function () {
                 document.getElementById(alertId).remove();
@@ -29,7 +32,7 @@
         }
 
         function _alert(content) {
-            _window(content);
+            _window(content,"messager-alert-error");
         }
         function _error(content) {
             _window(content, "messager-alert-error");
@@ -61,8 +64,8 @@
             //alert.classList.add(winType);
             alert.id = alertId;
             alert.style.top = (h - messageInfo.height) / 2 + "px";
-            alert.style.left = (w - messageInfo.window) / 2 + "px";
-            alert.innerHTML = '<div class="messager-alert-title">信息</div><div class="messager-alert-content">' + content + '</div><div class="message-alert-tool"><button id="' + alertId + '_ok_btn">确定</button></div>';
+            alert.style.left = (w - messageInfo.width) / 2 + "px";
+            alert.innerHTML = '<div class="messager-alert-title">信息</div><div class="messager-alert-content">' + content + '</div><div class="message-alert-tool"><button class="sui-button sui-button-primary" id="' + alertId + '_ok_cel">否</button><button class="sui-button" id="' + alertId + '_ok_btn">是</button></div>';
             document.body.appendChild(alert);
             document.getElementById(alertId + "_ok_btn").onclick = function () {
                 document.getElementById(alertId).remove();
