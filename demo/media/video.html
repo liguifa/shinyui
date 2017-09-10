@@ -4,37 +4,20 @@
     <title>警告提示</title>
     <meta charset="utf-8" />
     <link href="../../css/prism.css" rel="stylesheet" />
+    <link href="../../css/sui.icon.css" rel="stylesheet" />
     <link href="../../css/sui.default.css" rel="stylesheet" />
-    <link href="../../css/sui.pop.style.css" rel="stylesheet" />
+    <link href="../../css/sui.media.style.css" rel="stylesheet" />
     <link href="../css/style.css" rel="stylesheet" />
-    <style>
-        ul{
-            list-style: none;
-            margin: 0px;
-            padding: 0px;
-        }
-
-        li{
-            float: left;
-            margin: 5px;
-        }
-    </style>
 </head>
 <body ng-app="demo" ng-controller="demo.controller">
     <div class="demo-block">
-        <sui-line title="'示例'"></sui-line>
-        <ul>
-            <li><sui-button text="'成功'" type="'default'" click="vm.success()"></sui-button></li>
-            <li><sui-button text="'消息'" type="'default'" click="vm.info()"></sui-button></li>
-            <li><sui-button text="'警告'" type="'default'" click="vm.alert()"></sui-button></li>
-            <li><sui-button text="'错误'" type="'default'" click="vm.error()"></sui-button></li>
-        </ul>
-        <div class='sui-clear'></div>
+        <sui-line title="'按钮示例'"></sui-line>
+        <sui-video src="'http://img.ksbbs.com/asset/Mon_1605/25d705200a4eab4.mp4'" volume="50" sub-titles="vm.subTitles"></sui-video>
     </div>
 
     <div class="demo-block">
         <sui-line title="'代码'"></sui-line>
-        <div class='demo-code'><xmp><sui-uploader upload="vm.upload(filename)" progress="vm.progress" title="'普通上传'" file-types="['mp3','docx','doc','mp4']" file-size="65535"></sui-uploader></xmp></div>
+        <div class='demo-code'><xmp><sui-video src="'http://img.ksbbs.com/asset/Mon_1605/25d705200a4eab4.mp4'" volume="50" sub-titles="vm.subTitles"></sui-video></xmp></div>
     </div>
 
     <div class="demo-block">
@@ -60,9 +43,8 @@
 <script src="../../script/lib/prism.js"></script>
 <script src="../../script/lib/angular.min.js"></script>
 <script src="../../script/directive/sui.directive.js"></script>
+<script src="../../script/directive/sui.media.directive.js"></script>
 <script src="../../script/common/guid.service.js"></script>
-<script src="../../script/common/pop.service.js"></script>
-
 <script>
     (function () {
         function demo_controller($scope,pop) {
@@ -80,22 +62,29 @@
                     fields:[{name:"名称"},{name:"参数"},{name:"意义"}],
                     datas:[{rows:{name:"click",args:"",comment:""}}]
                 },
-                error:function(){
-                    pop.error("An error has occurred in the pop.");
-                },
-                confirm:function(){
-                    pop.confirm("太阳从西边出来？",function(){
-                        return true;
-                    });
-                },
-                alert:function(){
-                    pop.alert("这是一个提示框!");
-                },
-                success:function(){
-                    pop.notify(1,2,"鞍山","鞍山，简称鞍，辽宁省省辖市，是辽宁省第三大城市。是国务院批准的具有地方立法权的较大的市，沈阳经济区副中心城市，因市区南部一座形似马鞍的山峰而得名。鞍山地处环渤海经济区腹地，辽东半岛中部，位于沈大黄金经济带的重要支点，是辽宁中部城市群与辽东半岛开放区的重要连接带。[1] 鞍山是东北地区最大的钢铁工业城市、新中国钢铁工业的摇篮、中国第一钢铁工业城市。");
-                }
+                subTitles:[
+                    {time:2,title:"饮一杯酒葡萄美酒",},
+                    {time:4,title:"却难以下咽",},
+                    {time:7,title:"美的东西为何总伴随欺骗",},
+                    {time:14,title:"变得麻木感觉可会好一点",},
+                    {time:26,title:"这杯葡萄美酒",},
+                    {time:36,title:"我尝不出甘甜",},
+                     {time:68,title:"这一杯酒葡萄美酒",},
+                      {time:90,title:"乘在夜光杯中",},
+                       {time:123,title:"多少个夜完美的夜",},
+                        {time:145,title:"缺你而不可得",},
+                         {time:167,title:"今朝若是有酒当然今朝醉",},
+                          {time:189,title:"我尝不哪管明天爱恨情仇是与非出甘甜",},
+                          {time:193,title:"傻不傻无所谓只是不要虚伪",},
+                     {time:198,title:"葡萄美酒夜光杯",},
+                      {time:204,title:"今朝有酒今朝醉",},
+                       {time:208,title:"美的东西为何总伴随欺骗",},
+                        {time:213,title:"变得麻木感觉可会好一点",},
+                         {time:218,title:"这杯葡萄美酒我尝不出甘甜",},
+                          {time:225,title:"也许有天我会习惯被欺骗",},
+                ]
             }
         }
-        angular.module("demo", ["shinyui","pop"]).controller("demo.controller", ["$scope","pop.service",demo_controller]);
+        angular.module("demo", ["shinyui","shinyui.media"]).controller("demo.controller", ["$scope",demo_controller]);
     })();
 </script>

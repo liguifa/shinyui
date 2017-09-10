@@ -9,9 +9,11 @@
                 bottom_right:0,
                 bottom_left:0
             },
-            icons:[
-                {}
-            ]
+            icons:{
+                "messager-alert-error":"&#xe81c;",
+                "messager-alert-warn":"&#xe83e;",
+                "messager-alert-info":"&#xe823;",
+                "messager-alert-success":"&#xe819;"}
         }
 
         function _window(content, winType) {
@@ -24,7 +26,7 @@
             alert.id = alertId;
             alert.style.top = (h - messageInfo.height) / 2 + "px";
             alert.style.left = (w - messageInfo.width) / 2 + "px";
-            alert.innerHTML = '<div class="messager-alert-title">信息</div><div class="messager-alert-content"><div><i class="sui-icon">&#xe81b;</i></div>' + content + '</div><div class="message-alert-tool"><button id="' + alertId + '_ok_btn" class="sui-button">确定</button></div>';
+            alert.innerHTML = '<div class="messager-alert-title">信息</div><div class="messager-alert-content"><i class="sui-icon">'+messageInfo.icons[winType]+'</i>' + content + '</div><div class="message-alert-tool"><button id="' + alertId + '_ok_btn" class="sui-button">确定</button></div>';
             document.body.appendChild(alert);
             document.getElementById(alertId + "_ok_btn").onclick = function () {
                 document.getElementById(alertId).remove();
@@ -32,10 +34,16 @@
         }
 
         function _alert(content) {
-            _window(content,"messager-alert-error");
+            _window(content,"messager-alert-warn");
         }
         function _error(content) {
             _window(content, "messager-alert-error");
+        }
+        function _info(content) {
+            _window(content, "messager-alert-info");
+        }
+        function _success(content) {
+            _window(content,"messager-alert-success");
         }
         function _loading(isHide) {
             if (!isHide) {
@@ -126,6 +134,8 @@
             error: _error,
             loading: _loading,
             confirm: _confirm,
+            info:_info,
+            success:_success,
             notify: _notify
         }
     }

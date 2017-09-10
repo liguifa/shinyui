@@ -48,21 +48,29 @@
     /*box-shadow: 1px 1px 50px rgba(0,0,0,.3);*/
 }
 
-.messager-alert-content div{
-	background: #FF5722;
-	height: 48px;
-	width: 48px;
-	color: #ffffff;
-	line-height: 48px;
-	text-align: center;
-	display: inline-block;
-	border-radius: 50%;
-} 
-
 .messager-alert-content .sui-icon{
 	font-weight: bold;
 	font-size: 48px;
-	margin-left: -65px;
+	line-height: 48px;
+	margin: 4px 20px;
+	margin-left: -40px;
+	margin-right: 40px;
+}
+
+.messager-alert-error .sui-icon{
+	color: #E74C3C;
+}
+
+.messager-alert-warn .sui-icon{
+	color: #EEC20F;
+}
+
+.messager-alert-info .sui-icon{
+	color: #0095D9;
+}
+
+.messager-alert-success .sui-icon{
+	color: #1ABC9C;
 }
 
 .messager-alert-error {
