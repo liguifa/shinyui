@@ -648,10 +648,10 @@ angular.module("shinyui", [])
     var vm = {
         template: '<div class="sui-datagrid-content">\
                     <div class="sui-datagrid-tool" ng-if="isShowTool"><ul class="sui-datagrid-tool-list">\
-                        <li class="sui-datagrid-tool-item"><sui-icon type="remove"></sui-icon></li>\
-                        <li class="sui-datagrid-tool-item"><sui-icon type="add"></sui-icon></li>\
-                        <li class="sui-datagrid-tool-item"><sui-icon type="edit"></sui-icon></li>\
-                        <li class="sui-datagrid-tool-item"><sui-icon type="save"></sui-icon>\
+                        <li class="sui-datagrid-tool-item"><sui-icon type="\'trash_empty\'" click="vm.remove()"></sui-icon></li>\
+                        <li class="sui-datagrid-tool-item"><sui-icon type="\'plus_circle\'"></sui-icon></li>\
+                        <li class="sui-datagrid-tool-item"><sui-icon type="\'edit\'"></sui-icon></li>\
+                        <li class="sui-datagrid-tool-item"><sui-icon type="\'flopp\'"></sui-icon>\
                         <li class="sui-datagrid-tool-item sui-datagrid-tool-column"><sui-multiselect fields="vm.fields"></sui-multiselect></li>\
                         <li class="sui-datagrid-tool-item sui-datagrid-tool-column"><sui-search placeholder="vm.placeholder" fields="vm.fields"></sui-sui-search></li>\
                     </ul></div>\
@@ -705,7 +705,8 @@ angular.module("shinyui", [])
             isShowTool: "=",
             isShowFooter:"=",
             isEdit:"=",
-            sort:"&"
+            sort:"&",
+            remove:"&",
         },
         controller: function ($scope) {
             $scope.vm = {
@@ -749,7 +750,13 @@ angular.module("shinyui", [])
                         }
                     });
                 },
-                sortMap:[]
+                sortMap:[],
+                remove:function(){
+                    var items = $scope.datas.filter(function(item){
+                        return item.isSelected;
+                    });
+                    $scope.remove({items:items});
+                }
             };
 
             $scope.$watch("datas", function (datas) {
@@ -1758,7 +1765,7 @@ angular.module("shinyui", [])
 
 .directive("suiButton", function () {
     var vm = {
-        template: "<div>\
+        template: "<div class='sui-button-div'>\
                     <button class='sui-button {{vm.type}} {{vm.size}}' ng-click='vm.btn_click()'><sui-icon class='sui-button-icon' ng-if='vm.icon' type='vm.icon'></sui-icon><span>{{vm.text}}</span></button>\
                    </div>"
     }
@@ -1932,7 +1939,16 @@ angular.module("shinyui", [])
                     <ul class='sui-sidebar-list'>\
                         <li ng-repeat='item in vm.items'>\
                             <a class='sui-sidebar-text' href='{{item.url}}' ng-if='item.subs == undefined'>{{item.title}}</a>\
-                            <div class='sui-sidebar-subtitle' ng-if='item.subs != undefined' >{{item.title}}</div><ul ng-if='item.subs != undefined' class='sui-sidebar-list-sub'><li ng-class='{\"true\":\"sui-sidebar-item sui-sidebar-item-active\",\"false\":\"sui-sidebar-item\"}[sub.isActive]'  ng-repeat='sub in item.subs'><a class='sui-sidebar-text' href='{{sub.url}}' target='{{sub.target}}' ng-click='vm.navClick(sub)'>{{sub.title}}</a></li></ul>\
+                            <div class='sui-sidebar-subtitle' ng-if='item.subs != undefined' ng-click='vm.open(item)'>\
+                                <span>{{item.title}}</span>\
+                                <sui-icon class='sui-sidebar-subtitle-icon' type='\"angle_down\"' ng-if='item.subs != undefined && !item.isOpen' /></sui-icon>\
+                                <sui-icon class='sui-sidebar-subtitle-icon' type='\"angle_up\"' ng-if='item.subs != undefined && item.isOpen' /></sui-icon>\
+                            </div>\
+                            <ul ng-if='item.subs != undefined && item.isOpen' class='sui-sidebar-list-sub'>\
+                                <li ng-class='{\"true\":\"sui-sidebar-item sui-sidebar-item-active\",\"false\":\"sui-sidebar-item\"}[sub.isActive]'  ng-repeat='sub in item.subs'>\
+                                    <a class='sui-sidebar-text' href='{{sub.url}}' target='{{sub.target}}' ng-click='vm.navClick(sub)'>{{sub.title}}</a>\
+                                </li>\
+                            </ul>\
                         </li></ul>\
                    </div>"
     }
@@ -1957,6 +1973,12 @@ angular.module("shinyui", [])
                         })
                     })
                     item.isActive = true;
+                },
+                open:function(item){
+                    $scope.vm.items.forEach(function(nav){
+                        nav.isOpen = false;
+                    });
+                    item.isOpen = !item.isOpen;
                 }
             };
             $scope.$watch("items", function (items) {
@@ -2648,6 +2670,20 @@ angular.module("shinyui", [])
                 });
             },true);
         }
+    }
+})
+
+.directive("suiButtonGroup",function(){
+    var vm = {
+        template:"<div class='sui-button-group' ng-transclude></div>"
+    }
+    return {
+        restrict: "E",
+        template: vm.template,
+        replace: true,
+        priority: 1,
+        transclude:true,
+        scope: false
     }
 })
 

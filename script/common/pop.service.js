@@ -129,6 +129,19 @@
                 }
             }
         }
+        function _global(content){
+            var alertId = guid.newGuid();
+            var w = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+            var h = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+            var alert = document.createElement("div");
+            alert.classList.add("messager-global-alert");
+            // alert.classList.add(winType);
+            alert.id = alertId;
+            alert.style.top = (h - messageInfo.height) / 2 + "px";
+            alert.style.left = (w - messageInfo.width) / 2 + "px";
+            alert.innerHTML = '<span>'+content+'</span>';
+            document.body.appendChild(alert);
+        }
         return {
             alert: _alert,
             error: _error,
@@ -136,9 +149,10 @@
             confirm: _confirm,
             info:_info,
             success:_success,
-            notify: _notify
+            notify: _notify,
+            global:_global,
         }
     }
 
-    angular.module("pop",["shinyui"]).factory("pop.service", ["guid.service",pop_service]);
+    angular.module("shinyui.pop",["shinyui"]).factory("pop.service", ["guid.service",pop_service]);
 })();

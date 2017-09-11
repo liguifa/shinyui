@@ -232,7 +232,23 @@
 	overflow:hidden
 }
 
+.messager-global-alert{
+	position: fixed;
+	background: #ffffff;
+	border:1px solid #e2e2e2;
+	font-size: 12px;
+	padding: 10px 20px 5px 20px;
+	line-height: 14px;
+	border-radius: 7px;
+}
 
+.messager-global-alert span{
+	line-height: 14px;
+	display: block;
+	height: 14px;
+	font-family: Helvetica Neue,Helvetica,PingFang SC,Hiragino Sans GB,Microsoft YaHei,SimSun,sans-serif;
+    color: #666;
+}
 
 @keyframes orbit {
 	0% {

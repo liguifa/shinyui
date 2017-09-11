@@ -505,11 +505,20 @@ body,html,document {
     margin:0px;
     padding:0px;
     margin-left:10px;
+    -moz-user-select:none;
+    -webkit-user-select:none;
+    -ms-user-select:none;
+    -khtml-user-select:none;
+    user-select:none;
 }
 
 .sui-datagrid-tool-item{
     float:left;
     margin-top:11px;
+}
+
+.sui-datagrid-tool-item .sui-icon{
+    color: #009688;
 }
 
 .sui-datagrid-tool-column{
@@ -2002,7 +2011,6 @@ max-height:20px;
      font-size: 14px;
      color:#fff;
      padding-left:20px;
-     cursor:default;
       moz-user-select:-moz-none; 
   -moz-user-select:none; 
   -o-user-select:none; 
@@ -2010,6 +2018,20 @@ max-height:20px;
   -webkit-user-select:none;
   -ms-user-select:none; 
   user-select:none;
+  cursor: pointer;
+  
+    }
+
+        .sui-sidebar-subtitle span{
+            display: inline-block;
+            width: 130px;
+        }
+
+    .sui-sidebar-subtitle-icon{
+        color:#fff;
+        line-height: 48px;
+        position: relative;
+        display: inline-block;
     }
 
 .sui-sidebar-item-active{
@@ -2290,7 +2312,7 @@ max-height:20px;
     width: 40px;
     border-radius: 50%;
     /*background: #ffffff;*/
-    border: 1px solid #e2e2e2;
+    /*border: 1px solid #e2e2e2;*/
 }
 
 .sui-carousel{
@@ -2496,4 +2518,23 @@ max-height:20px;
 .sui-steps-list-step-description{
     padding-left: 30px;
     padding-top: 0px;
+}
+
+.sui-button-group{
+    
+}
+
+.sui-button-group .sui-button{
+    float:left;
+    border-radius: 0px;
+}
+
+.sui-button-group .sui-button-div:first-child .sui-button{
+    border-bottom-left-radius: 2px;
+    border-top-left-radius: 2px;
+}
+
+.sui-button-group .sui-button-div:last-child .sui-button{
+    border-bottom-right-radius: 2px;
+    border-top-right-radius: 2px;
 }

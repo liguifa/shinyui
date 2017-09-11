@@ -62,6 +62,9 @@ angular.module("shinyui.media",[])
                         </ul>\
                     </div>\
                     <div class='sui-video-subtitle'><span>{{vm.currentSubTitle}}</span></div>\
+                    <div class='sui-video-barrage-pool' style='bottom:{{vm.height}}px;'>\
+                        <span ng-repeat='item in vm.barrages' class='sui-video-barrage-pool-text' style='left:{{item.left}}px;top:{{item.top}}px;color:{{item.color}};'>{{item.text}}</span>\
+                    </div>\
                     <div class='sui-clear'></div>\
                   </div>",
         
@@ -100,6 +103,7 @@ angular.module("shinyui.media",[])
                 hideSubTitle:null,
                 isStartSetVolume:false,
                 startVolumeY:0,
+                barrages:[],
                 play:function(){
                     if($scope.vm.isPlay){
                         $scope.vm.video.pause();
@@ -121,9 +125,12 @@ angular.module("shinyui.media",[])
                                 clearTimeout($scope.vm.hideSubTitle);
                             }
                             $scope.vm.hideSubTitle = window.setTimeout(function(){
-                                $scope.vm.currentSubTitle = "";
+                                $scope.$apply(function(){
+                                    $scope.vm.currentSubTitle = "";
+                                });
                             },3000);
                         }
+                        // $scope.vm.moveBarrages();
                     });
                 },
                 loadedmetadata:function(){
@@ -162,6 +169,21 @@ angular.module("shinyui.media",[])
                         var y = $event.clientY - $scope.vm.startVolumeY;
                         $scope.vm.volume += 0-y;
                     }
+                },
+                moveBarrages:function(){
+                    window.setInterval(function(){
+                        $scope.$apply(function(){
+                            var tempBarrages = [];
+                            $scope.vm.barrages.forEach(function(item) {
+                                var addLeft = 1;
+                                item.left -= addLeft;
+                                if(item.left > 0 - item.text.length * 16 - 4){
+                                    tempBarrages.push(item);
+                                }
+                            }, this);
+                            $scope.vm.barrages = tempBarrages;
+                        });
+                    },20);
                 }
             }
             $scope.$watch("volume",function(volume){
@@ -198,6 +220,25 @@ angular.module("shinyui.media",[])
             $scope.$watch("src",function(src){
                 $scope.vm.src = src;
             });
+            $scope.vm.barrages = [
+                {time:2,left:30,top:10,color:'#123456',text:'你真是法海阿1'},
+                {time:2,left:30,top:15,color:'#123456',text:'你真是法海阿2'},
+                {time:2,left:30,top:20,color:'#123456',text:'你真是法海阿3'},
+                {time:2,left:30,top:25,color:'#123456',text:'你真是法海阿4'},
+                {time:2,left:30,top:30,color:'#123456',text:'你真是法海阿5'},
+                {time:2,left:70,top:10,color:'#123456',text:'你真是法海阿6'},
+                {time:2,left:50,top:15,color:'#123456',text:'你真是法海阿7'},
+                {time:2,left:40,top:20,color:'#123456',text:'你真是法海阿8'},
+                {time:2,left:60,top:25,color:'#123456',text:'你真是法海阿9'},
+                {time:2,left:80,top:30,color:'#123456',text:'你真是法海阿10'},
+                {time:2,left:110,top:10,color:'#123456',text:'你真是法海阿11'},
+                {time:2,left:145,top:15,color:'#123456',text:'你真是法海阿12'},
+                {time:2,left:156,top:20,color:'#123456',text:'你真是法海阿13'},
+                {time:2,left:179,top:25,color:'#123456',text:'你真是法海阿14'},
+                {time:2,left:134,top:30,color:'#123456',text:'你真是法海阿15'},
+            ];
+
+            $scope.vm.moveBarrages();
         },
         link:function($scope,elements,attrs){
             var video = elements[0].children[0];

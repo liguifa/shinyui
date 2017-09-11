@@ -4,13 +4,14 @@
     <title></title>
     <meta charset="utf-8" />
     <link href="../css/sui.default.css" rel="stylesheet" />
+    <link href="../css/sui.pop.style.css" rel="stylesheet" />
     <link href="../css/sui.icon.css" rel="stylesheet" />
     <link href="css/style.css" rel="stylesheet" />
 </head>
 <body ng-app="demo" ng-controller="demo.controller">
     <div class="demo-block" style="height:500px;">
         <sui-line title="'基本表格示例'"></sui-line>
-        <sui-datagrid is-show-thead="true" fields="vm.fields" is-can-select="true" is-edit="false" datas="vm.datas" is-show-tool="true" is-show-footer="true"></sui-datagrid>
+        <sui-datagrid remove="vm.remove(items)" is-show-thead="true" fields="vm.fields" is-can-select="true" is-edit="false" datas="vm.datas" is-show-tool="true" is-show-footer="true"></sui-datagrid>
     </div>
 
     <div class="demo-block">
@@ -45,10 +46,13 @@
 <link href="../css/sui.icon.css" rel="stylesheet" />
 <script src="../script/lib/angular.min.js"></script>
 <script src="../script/directive/sui.directive.js"></script>
+<script src="../script/directive/sui.icon.directive.js"></script>
 <script src="../script/common/guid.service.js"></script>
+<script src="../script/common/pop.service.js"></script>
+<script src="../script/common/sui.icon.js"></script>
 <script>
     (function () {
-        function demo_controller($scope) {
+        function demo_controller($scope,pop) {
             $scope.vm = {
                 fields: [{ name: "文件名" }, { name: "文件大小" }, { name: "修改日期" }, { name: "文件类别" }, { name: "创建者" }, { name: "权限" }],
                 datas: [{ rows: { name: "123.txt", size: "17K", date: "12/12/2020", type: "txt", createBy: "Guifa Li", p: "读/写" } },
@@ -68,6 +72,11 @@
                         { rows: { name: "is-can-select", type: "bool", choose: "true:显示 false:隐藏", example: "true", default: "true", commnet: "是否能选择" } },
                         { rows: { name: "is-edit", type: "bool", choose: "true:显示 false:隐藏", example: "true", default: "true", commnet: "是否能编辑" } },
                         ]
+                },
+                remove:function(){
+                    pop.confirm("太阳从西边出来？",function(){
+                        return true;
+                    });
                 }
             }
 
@@ -75,6 +84,6 @@
                 $scope.vm.datas.push({ rows: { name: "123.txt", size: "17K", date: "12/12/2020", type: "txt", createBy: "Guifa Li", p: "读/写" } });
             }
         }
-        angular.module("demo", ["shinyui"]).controller("demo.controller", demo_controller);
+        angular.module("demo", ["shinyui","shinyui.icon","shinyui.pop"]).controller("demo.controller", ["$scope","pop.service",demo_controller]);
     })();
 </script>
