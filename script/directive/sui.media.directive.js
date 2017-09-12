@@ -54,16 +54,16 @@ angular.module("shinyui.media",[])
                             </li>\
                             <li class='sui-video-barrage-list-item sui-video-barrage-list-item-text' style='width:{{vm.width-180}}px;'>\
                                 <i class='sui-icon'>&#xf120;</i>\
-                                <input type='text' class='sui-video-barrage-list-item-text-input' style='width:{{vm.width-238}}px;' />\
+                                <input type='text' ng-model='vm.inputBarrage' class='sui-video-barrage-list-item-text-input' style='width:{{vm.width-238}}px;' />\
                             </li>\
                             <li class='sui-video-barrage-list-item'>\
-                                <button class='sui-video-barrage-list-item-send'>发送</button>\
+                                <button class='sui-video-barrage-list-item-send' ng-click='vm.send()'>发送</button>\
                             </li>\
                         </ul>\
                     </div>\
                     <div class='sui-video-subtitle'><span>{{vm.currentSubTitle}}</span></div>\
-                    <div class='sui-video-barrage-pool' style='bottom:{{vm.height}}px;'>\
-                        <span ng-repeat='item in vm.barrages' class='sui-video-barrage-pool-text' style='left:{{item.left}}px;top:{{item.top}}px;color:{{item.color}};'>{{item.text}}</span>\
+                    <div class='sui-video-barrage-pool' style='bottom:{{vm.height}}px;height:{{vm.height-68}}px;'>\
+                        <div ng-repeat='item in vm.barrages' class='sui-video-barrage-pool-text' style='left:{{item.left}}px;top:{{item.top}}px;color:{{item.color}};'>{{item.text}}</div>\
                     </div>\
                     <div class='sui-clear'></div>\
                   </div>",
@@ -80,6 +80,8 @@ angular.module("shinyui.media",[])
             autoplay:"=",
             volume:"=",
             subTitles:"=",
+            barrages:"=",
+            sendbarrage:"&"
         },
         controller:function($scope){
             $scope.vm = {
@@ -104,6 +106,7 @@ angular.module("shinyui.media",[])
                 isStartSetVolume:false,
                 startVolumeY:0,
                 barrages:[],
+                queueBarrages:[],
                 play:function(){
                     if($scope.vm.isPlay){
                         $scope.vm.video.pause();
@@ -131,6 +134,7 @@ angular.module("shinyui.media",[])
                             },3000);
                         }
                         // $scope.vm.moveBarrages();
+                        $scope.vm.dispatchBarrages();
                     });
                 },
                 loadedmetadata:function(){
@@ -184,6 +188,47 @@ angular.module("shinyui.media",[])
                             $scope.vm.barrages = tempBarrages;
                         });
                     },20);
+                },
+                dispatchBarrages:function(){
+                    var firstBarrage = $scope.vm.queueBarrages[0];
+                    if(firstBarrage.time <= $scope.vm.currentTime){
+                        for(var i=0,top=10;i<10;i++){
+                            var currentBarrages = $scope.vm.barrages.filter(function(item){
+                                return item.top == top + i*30;
+                            }).sort(function(item1,item2){
+                                return 0-(item1.left - item2.left);
+                            });
+                            if(currentBarrages.length == 0){
+                                firstBarrage.top = top + i*30;
+                                firstBarrage.left = $scope.vm.width;
+                                $scope.vm.queueBarrages.splice(0,1);
+                                $scope.vm.barrages.push(firstBarrage);
+                                break;
+                            } else {
+                                var lastBarrage = currentBarrages[0];
+                                if(lastBarrage.left + lastBarrage.text.length * 25 + 5 < $scope.vm.width){
+                                    firstBarrage.top = top + i*30;
+                                    firstBarrage.left = $scope.vm.width;
+                                    $scope.vm.queueBarrages.splice(0,1);
+                                    $scope.vm.barrages.push(firstBarrage);
+                                    break;
+                                }
+                            }
+                        }
+                        $scope.vm.dispatchBarrages();
+                    }
+                },
+                send:function(){
+                    if($scope.vm.inputBarrage!=""){
+                        var barrage = {
+                            time:$scope.vm.currentTime,
+                            text:$scope.vm.inputBarrage,
+                            color:"#ffffff"
+                        }
+                        $scope.vm.queueBarrages.unshift(barrage);
+                        $scope.sendbarrage({barrage:barrage});
+                        $scope.vm.inputBarrage = "";
+                    }
                 }
             }
             $scope.$watch("volume",function(volume){
@@ -220,24 +265,11 @@ angular.module("shinyui.media",[])
             $scope.$watch("src",function(src){
                 $scope.vm.src = src;
             });
-            $scope.vm.barrages = [
-                {time:2,left:30,top:10,color:'#123456',text:'你真是法海阿1'},
-                {time:2,left:30,top:15,color:'#123456',text:'你真是法海阿2'},
-                {time:2,left:30,top:20,color:'#123456',text:'你真是法海阿3'},
-                {time:2,left:30,top:25,color:'#123456',text:'你真是法海阿4'},
-                {time:2,left:30,top:30,color:'#123456',text:'你真是法海阿5'},
-                {time:2,left:70,top:10,color:'#123456',text:'你真是法海阿6'},
-                {time:2,left:50,top:15,color:'#123456',text:'你真是法海阿7'},
-                {time:2,left:40,top:20,color:'#123456',text:'你真是法海阿8'},
-                {time:2,left:60,top:25,color:'#123456',text:'你真是法海阿9'},
-                {time:2,left:80,top:30,color:'#123456',text:'你真是法海阿10'},
-                {time:2,left:110,top:10,color:'#123456',text:'你真是法海阿11'},
-                {time:2,left:145,top:15,color:'#123456',text:'你真是法海阿12'},
-                {time:2,left:156,top:20,color:'#123456',text:'你真是法海阿13'},
-                {time:2,left:179,top:25,color:'#123456',text:'你真是法海阿14'},
-                {time:2,left:134,top:30,color:'#123456',text:'你真是法海阿15'},
-            ];
-
+            $scope.$watch("barrages",function(barrages){
+                $scope.vm.queueBarrages = barrages.sort(function(item1,item2){
+                    return item1.time - item2.time;
+                })
+            });
             $scope.vm.moveBarrages();
         },
         link:function($scope,elements,attrs){
@@ -258,6 +290,52 @@ angular.module("shinyui.media",[])
                         $scope.vm.isFull = false;
                     }
             }
+        }
+    }
+})
+
+.directive("suiAudio",function(){
+    var vm = {
+        template:"<div class='sui-audio' style='height:500px;width:400px;'>\
+                    <audio class='sui-audio-item' src='{{vm.src}}' autoplay></audio>\
+                    <div class='sui-audio-title' style='background:url(../../Images/10922980_064633.jpg);'>\
+                        <i class='sui-icon sui-aduio-title-icon'>&#xe874;</i>\
+                        <i class='sui-icon sui-aduio-title-icon'>&#xe86e;</i>\
+                        <i class='sui-icon sui-aduio-title-icon'>&#xe872;</i>\
+                        <div class='sui-aduio-progress'></div>\
+                        <div class='sui-aduio-progress-load' style='width:71%;'></div>\
+                        <div class='sui-aduio-progress-play' style='width:31%;'><div class='sui-aduio-progress-play-dot'></div>\</div>\
+                    </div>\
+                    <div class='sui-audio-tool'></div>\
+                    <div class='sui-audio-subtitle' style='height:330px;'>\
+                        <ul class='sui-audio-subtitle-list'>\
+                            <li class='sui-audio-subtitle-list-item' ng-repeat='item in vm.subtitles'>{{item.title}}</li>\
+                        </ul>\
+                    </div>\
+                  </div>"
+    }
+    return {
+        restrict: "E",
+        template: vm.template,
+        replace: true,
+        priority: 1,
+        transclude:true,
+        scope: {
+            src:"=",
+            subtitles:"=",
+        },
+        controller:function($scope){
+            $scope.vm = {
+                src:"",
+                subtitles:[]
+            }
+
+            $scope.$watch("src",function(src){
+                $scope.vm.src = src;
+            });
+            $scope.$watch("subtitles",function(subtitles){
+                $scope.vm.subtitles = subtitles;
+            });
         }
     }
 })

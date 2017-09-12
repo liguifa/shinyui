@@ -275,8 +275,9 @@
 .sui-video-subtitle{
     width: 100%;
     text-align: center;
-    position: relative;
-    bottom: 110px;
+    position: absolute;
+    left: 0px;
+    bottom: 80px;
     font-size: 18px;
     color: #ffffff;
     -moz-user-select:none;
@@ -298,16 +299,97 @@
 }
 
 .sui-video-barrage-pool-text{
-    position: relative;
-    font-size: 16px;
+    position:absolute;
     -moz-user-select:none;
     -webkit-user-select:none;
     -ms-user-select:none;
     -khtml-user-select:none;
     user-select:none;
     cursor:default;
-     overflow: hidden;
+    overflow: hidden;
     text-overflow:ellipsis;
-    white-space:nowrap;
-    float: left;
+    display: inline-block;
+    white-space: nowrap;
+    pointer-events: none;
+    color: #ffffff;
+    font-size: 25px;
+    font-weight: bold;
+}
+
+.sui-audio{
+    margin: auto;
+}
+
+.sui-audio-title{
+    width: 100%;
+    height: 120px;
+    margin: 0px;
+    text-align: center;
+}
+
+.sui-audio-tool{
+    height: 50px;
+    width: 100%;
+    background: #2E3639;
+}
+
+.sui-audio-subtitle{
+    width: 100%;
+    height: 100%;
+    background: #ffffff;
+    border:1px solid #e2e2e2;
+    overflow-y: auto;
+}
+
+.sui-aduio-title-icon{
+    font-size: 25px;
+    color: #ffffff;
+    line-height:120px; 
+}
+
+.sui-audio-subtitle-list{
+    list-style: none;
+    margin: 10px;
+    padding: 0px;
+}
+
+.sui-audio-subtitle-list-item{
+    text-align: center;
+    line-height: 34px;
+}
+
+.sui-audio-subtitle::-webkit-scrollbar{
+    display: none;
+}
+
+.sui-aduio-progress{
+    background: #e5e9ef;
+    height: 6px;
+    width: 100%;
+    margin-top: -6px;
+}
+
+.sui-aduio-progress-load{
+    background: #8adced;
+    height: 6px;
+    width: 100%;
+    margin-top: -6px;
+}
+
+.sui-aduio-progress-play{
+    background: #00a1d6;
+    height: 6px;
+    width: 100%;
+    margin-top: -6px;
+}
+
+.sui-aduio-progress-play-dot{
+    height: 14px;
+    width: 14px;
+    border:solid 2px #00a1d6;
+    background: #fff;
+    border-radius: 50%;
+    float: right;
+    margin-top:-6px;
+    margin-right: -3px;
 }
