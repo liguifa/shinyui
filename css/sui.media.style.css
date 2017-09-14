@@ -331,6 +331,22 @@
     height: 50px;
     width: 100%;
     background: #2E3639;
+    margin-bottom: -6px;
+}
+
+.sui-audio-tool ul{
+    list-style: none;
+    margin: 0px;
+    padding: 0px;
+}
+
+.sui-audio-tool ul li{
+    color:#8adced;
+    float: left;
+    width: 33%;
+    line-height: 50px;
+    text-align: center;
+    margin-bottom: -6px;
 }
 
 .sui-audio-subtitle{
@@ -351,11 +367,17 @@
     list-style: none;
     margin: 10px;
     padding: 0px;
+    position: relative;
+    left: 0px;
 }
 
 .sui-audio-subtitle-list-item{
     text-align: center;
     line-height: 34px;
+}
+
+.sui-audio-subtitle-list-item-active{
+    color: #FF6C2F;
 }
 
 .sui-audio-subtitle::-webkit-scrollbar{

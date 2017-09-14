@@ -274,7 +274,7 @@ angular.module("shinyui.media",[])
         },
         link:function($scope,elements,attrs){
             var video = elements[0].children[0];
-             $scope.vm.video = video;
+            $scope.vm.video = video;
             video.ontimeupdate = $scope.vm.timeupdate;
             video.onloadedmetadata = $scope.vm.loadedmetadata;
             video.onprogress = $scope.vm.progress;
@@ -300,16 +300,22 @@ angular.module("shinyui.media",[])
                     <audio class='sui-audio-item' src='{{vm.src}}' autoplay></audio>\
                     <div class='sui-audio-title' style='background:url(../../Images/10922980_064633.jpg);'>\
                         <i class='sui-icon sui-aduio-title-icon'>&#xe874;</i>\
-                        <i class='sui-icon sui-aduio-title-icon'>&#xe86e;</i>\
+                        <i class='sui-icon sui-aduio-title-icon' ng-click='vm.play()'>&#xe86e;</i>\
                         <i class='sui-icon sui-aduio-title-icon'>&#xe872;</i>\
                         <div class='sui-aduio-progress'></div>\
-                        <div class='sui-aduio-progress-load' style='width:71%;'></div>\
-                        <div class='sui-aduio-progress-play' style='width:31%;'><div class='sui-aduio-progress-play-dot'></div>\</div>\
+                        <div class='sui-aduio-progress-load' style='width:{{vm.buffered_progress}}%;'></div>\
+                        <div class='sui-aduio-progress-play' style='width:{{vm.paly_progress}}%;'><div class='sui-aduio-progress-play-dot'></div>\</div>\
                     </div>\
-                    <div class='sui-audio-tool'></div>\
+                    <div class='sui-audio-tool'>\
+                        <ul>\
+                            <li><i class='sui-icon'>&#xf0c9;</i></li>\
+                            <li><i class='sui-icon'>&#xf298;</i></li>\
+                            <li><i class='sui-icon'>&#xf27a;</i></li>\
+                        </ul>\
+                    </div>\
                     <div class='sui-audio-subtitle' style='height:330px;'>\
-                        <ul class='sui-audio-subtitle-list'>\
-                            <li class='sui-audio-subtitle-list-item' ng-repeat='item in vm.subtitles'>{{item.title}}</li>\
+                        <ul class='sui-audio-subtitle-list' style='top:{{vm.currentTop}}px;'>\
+                            <li class='sui-audio-subtitle-list-item' ng-class='{\"sui-audio-subtitle-list-item-active\":item.isCurrent}' ng-repeat='item in vm.subtitles'>{{item.title}}</li>\
                         </ul>\
                     </div>\
                   </div>"
@@ -327,7 +333,69 @@ angular.module("shinyui.media",[])
         controller:function($scope){
             $scope.vm = {
                 src:"",
-                subtitles:[]
+                subtitles:[],
+                audio:null,
+                volume:0,
+                duration:0,
+                buffered_progress:0,
+                paly_progress:0,
+                currentTime:0,
+                currentTop:0,
+                height:500,
+                currentSubtitle:0,
+                isPlay:true,
+                timeupdate:function(){
+                    $scope.$apply(function(){
+                        $scope.vm.paly_progress = ($scope.vm.audio.currentTime/$scope.vm.duration)*100;
+                        $scope.vm.currentTime = $scope.vm.audio.currentTime;
+                        // var firstSubTitle = $scope.vm.queueSubTitles[0];
+                        // if(firstSubTitle.time <= $scope.vm.currentTime){
+                        //     $scope.vm.currentSubTitle = firstSubTitle.title;
+                        //     $scope.vm.queueSubTitles.splice(0,1);
+                        //     if($scope.vm.hideSubTitle != null){
+                        //         clearTimeout($scope.vm.hideSubTitle);
+                        //     }
+                        //     $scope.vm.hideSubTitle = window.setTimeout(function(){
+                        //         $scope.$apply(function(){
+                        //             $scope.vm.currentSubTitle = "";
+                        //         });
+                        //     },3000);
+                        // }
+                        // // $scope.vm.moveBarrages();
+                        // $scope.vm.dispatchBarrages();
+                        $scope.vm.setCurrentSubtitle();
+                    });
+                },
+                loadedmetadata:function(){
+                    $scope.vm.duration = $scope.vm.audio.duration
+                },
+                progress:function(){
+                    $scope.$apply(function(){
+                        var prload = $scope.vm.audio.buffered;
+                        var start = prload.start(0);
+                        var end = prload.end(0);
+                        $scope.vm.buffered_progress = end/$scope.vm.duration * 100;
+                    });
+                },
+                setCurrentSubtitle:function(){
+                    var startSubtitleCount = parseInt(((($scope.vm.height - 170)/38)+1)/2);
+                    var next = $scope.vm.currentSubtitle + 1;
+                    if($scope.vm.subtitles[next].time<$scope.vm.currentTime){
+                        $scope.vm.subtitles[$scope.vm.currentSubtitle].isCurrent = false;
+                        $scope.vm.subtitles[next].isCurrent = true;
+                        if(next > startSubtitleCount){
+                            $scope.vm.currentTop -= 34;
+                        }
+                        $scope.vm.currentSubtitle = next;
+                    }
+                },
+                play:function(){
+                    if($scope.vm.isPlay){
+                        $scope.vm.audio.pause();
+                    } else {
+                        $scope.vm.audio.play();
+                    }
+                }
             }
 
             $scope.$watch("src",function(src){
@@ -335,7 +403,16 @@ angular.module("shinyui.media",[])
             });
             $scope.$watch("subtitles",function(subtitles){
                 $scope.vm.subtitles = subtitles;
+                $scope.vm.subtitles[0].isCurrent = true;
             });
+        },
+        link:function($scope,elements,attrs){
+            var audio = elements[0].children[0];
+            $scope.vm.audio = audio;
+            audio.ontimeupdate = $scope.vm.timeupdate;
+            audio.onloadedmetadata = $scope.vm.loadedmetadata;
+            audio.onprogress = $scope.vm.progress;
+            $scope.vm.volume = audio.volume;
         }
     }
 })
