@@ -1319,7 +1319,14 @@ angular.module("shinyui", [])
             });
             $scope.$watch("readonly", function (readonly) {
                 $scope.vm.readonly = readonly;
-            })
+            });
+            $scope.$watch("falseText",function(falseText){
+                $scope.vm.falseText = falseText;
+                $scope.vm.displayText = falseText;
+            });
+            $scope.$watch("trueText",function(trueText){
+                $scope.vm.trueText = trueText;
+            });
         }
     }
 })
@@ -2684,6 +2691,36 @@ angular.module("shinyui", [])
         priority: 1,
         transclude:true,
         scope: false
+    }
+})
+
+.directive("suiSlider",function(){
+    var vm = {
+        template:"<div class='sui-slider'>\
+                    <div class='sui-slider-line'>\
+                        <div class='sui-slider-line-active' style='width:{{vm.value}}%'></div>\
+                        <div class='sui-slider-line-point' ng-mousemove='vm.setVolume($event)' ng-mouseup='vm.endSetVolume()' ng-mouseout='vm.endSetVolume()'></div>\
+                    </div>\
+                  </div>"
+    }
+    return {
+        restrict: "E",
+        template: vm.template,
+        replace: true,
+        priority: 1,
+        transclude:true,
+        scope: {
+            value:"="
+        },
+        controller:function($scope){
+            $scope.vm = {
+                value:0
+            }
+
+            $scope.$watch("value",function(value){
+                $scope.vm.value = value;
+            });
+        }
     }
 })
 

@@ -46,7 +46,7 @@ angular.module("shinyui.media",[])
                     </div>\
                     <div class='sui-video-barrage'>\
                         <ul class='sui-video-barrage-list sui-video-barrage-list'>\
-                            <li class='sui-video-barrage-list-item sui-video-barrage-list-item-hover'>\
+                            <li class='sui-video-barrage-list-item sui-video-barrage-list-item-hover' ng-click='vm.showBarrageSetting()'>\
                                 <i class='sui-icon'>&#xe845;</i>\
                             </li>\
                             <li class='sui-video-barrage-list-item sui-video-barrage-list-item-hover'>\
@@ -64,6 +64,12 @@ angular.module("shinyui.media",[])
                     <div class='sui-video-subtitle'><span>{{vm.currentSubTitle}}</span></div>\
                     <div class='sui-video-barrage-pool' style='bottom:{{vm.height}}px;height:{{vm.height-68}}px;'>\
                         <div ng-repeat='item in vm.barrages' class='sui-video-barrage-pool-text' style='left:{{item.left}}px;top:{{item.top}}px;color:{{item.color}};'>{{item.text}}</div>\
+                    </div>\
+                    <div class='sui-video-barrage-setting' ng-if='vm.isShowBarrageSetting'>\
+                        <ul class='sui-video-barrage-setting-list'>\
+                            <li class='sui-video-barrage-setting-list-item'><span><label>显示弹幕</label><sui-switch class='sui-video-barrage-setting-toggle' true-text='\"开\"' false-text='\"关\"'></sui-switch></span></li>\
+                            <li class='sui-video-barrage-setting-list-item'><span><label>透&nbsp;&nbsp;明&nbsp;&nbsp;度</label><sui-slider value='\"34\"'></sui-slider></li>\
+                        </ul>\
                     </div>\
                     <div class='sui-clear'></div>\
                   </div>",
@@ -107,6 +113,10 @@ angular.module("shinyui.media",[])
                 startVolumeY:0,
                 barrages:[],
                 queueBarrages:[],
+                isShowBarrageSetting:false,
+                showBarrageSetting:function(){
+                    $scope.vm.isShowBarrageSetting = !$scope.vm.isShowBarrageSetting;
+                },
                 play:function(){
                     if($scope.vm.isPlay){
                         $scope.vm.video.pause();

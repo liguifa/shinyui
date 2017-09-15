@@ -1325,6 +1325,7 @@ max-height:20px;
 .sui-switch{
     height:24px;
     width:54px;
+    display: inline-block;
 }
 
 .sui-switch-input{
@@ -2537,4 +2538,35 @@ max-height:20px;
 .sui-button-group .sui-button-div:last-child .sui-button{
     border-bottom-right-radius: 2px;
     border-top-right-radius: 2px;
+}
+
+.sui-slider{
+    width: 200px;
+    display: inline-block;
+}
+
+.sui-slider-line{
+    width: 100%;
+    height: 6px;
+    border-radius: 2px;
+    background: #e5e9ef;
+}
+
+.sui-slider-line-active{
+    height: 6px;
+    border-radius: 2px;
+    background: #00a1d6;
+    float: left;
+}
+
+.sui-slider-line-point{
+    height: 14px;
+    width: 14px;
+    border:solid 2px #00a1d6;
+    background: #fff;
+    border-radius: 50%;
+     float: left;
+    margin-top:-7px;
+    margin-left: -3px;
+    cursor: pointer;
 }
