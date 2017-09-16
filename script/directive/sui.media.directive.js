@@ -62,16 +62,16 @@ angular.module("shinyui.media",[])
                         </ul>\
                     </div>\
                     <div class='sui-video-subtitle'><span>{{vm.currentSubTitle}}</span></div>\
-                    <div class='sui-video-barrage-pool' style='bottom:{{vm.height}}px;height:{{vm.height-68}}px;'>\
-                        <div ng-repeat='item in vm.barrages' class='sui-video-barrage-pool-text' style='left:{{item.left}}px;top:{{item.top}}px;color:{{item.color}};'>{{item.text}}</div>\
+                    <div ng-if='vm.isShowBarrage' class='sui-video-barrage-pool' style='bottom:{{vm.height}}px;height:{{vm.height-68}}px;'>\
+                        <div ng-repeat='item in vm.barrages' class='sui-video-barrage-pool-text' style='left:{{item.left}}px;top:{{item.top}}px;color:{{item.color}};font-size:{{vm.barrageSize}}px;opacity:{{vm.barrageOpacity/100}}'>{{item.text}}</div>\
                     </div>\
                     <div class='sui-video-barrage-setting' ng-if='vm.isShowBarrageSetting'>\
                         <ul class='sui-video-barrage-setting-list'>\
-                            <li class='sui-video-barrage-setting-list-item'><span><label>显示弹幕</label><sui-switch class='sui-video-barrage-setting-toggle' true-text='\"开\"' false-text='\"关\"'></sui-switch></span></li>\
-                            <li class='sui-video-barrage-setting-list-item'><span><label>透&nbsp;&nbsp;明&nbsp;&nbsp;度</label><sui-slider value='vm.barrageOpacity'></sui-slider><span class='sui-video-barrage-setting-list-item-value'>{{vm.barrageOpacity}}%</span></li>\
-                            <li class='sui-video-barrage-setting-list-item'><span><label>字&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;号</label><sui-slider value='vm.barrageSize'></sui-slider><span class='sui-video-barrage-setting-list-item-value'>{{vm.barrageSize/4}}</span></li>\
-                            <li class='sui-video-barrage-setting-list-item'><span><label>速&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;度</label><sui-slider value='vm.barrageSpeech'></sui-slider><span class='sui-video-barrage-setting-list-item-value'>{{vm.barrageSpeech/5}}秒</span></li>\
-                            <li class='sui-video-barrage-setting-list-item'><span><label>密&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;度</label><sui-slider value='vm.barrageCount'></sui-slider><span class='sui-video-barrage-setting-list-item-value'>{{vm.barrageCount/10}}条</span></li>\
+                            <li class='sui-video-barrage-setting-list-item'><span><label>显示弹幕</label><sui-switch class='sui-video-barrage-setting-toggle' value='vm.isShowBarrage' true-text='\"开\"' false-text='\"关\"'></sui-switch></span></li>\
+                            <li class='sui-video-barrage-setting-list-item'><span><label>透&nbsp;&nbsp;明&nbsp;&nbsp;度</label><sui-slider value='vm.barrageOpacity' min='0' max='100' type='\"int\"'></sui-slider><span class='sui-video-barrage-setting-list-item-value'>{{vm.barrageOpacity}}%</span></li>\
+                            <li class='sui-video-barrage-setting-list-item'><span><label>字&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;号</label><sui-slider value='vm.barrageSize'  min='1' max='32' type='\"int\"'></sui-slider><span class='sui-video-barrage-setting-list-item-value'>{{vm.barrageSize}}</span></li>\
+                            <li class='sui-video-barrage-setting-list-item'><span><label>速&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;度</label><sui-slider value='vm.barrageSpeech'  min='1' max='30' type='\"int\"'></sui-slider><span class='sui-video-barrage-setting-list-item-value'>{{vm.barrageSpeech}}秒</span></li>\
+                            <li class='sui-video-barrage-setting-list-item'><span><label>密&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;度</label><sui-slider value='vm.barrageCount'  min='1' max='20' type='\"int\"'></sui-slider><span class='sui-video-barrage-setting-list-item-value'>{{vm.barrageCount}}条</span></li>\
                         </ul>\
                     </div>\
                     <div class='sui-clear'></div>\
@@ -121,6 +121,7 @@ angular.module("shinyui.media",[])
                 barrageSize:24,
                 barrageSpeech:10,
                 barrageCount:10,
+                isShowBarrage:true,
                 showBarrageSetting:function(){
                     $scope.vm.isShowBarrageSetting = !$scope.vm.isShowBarrageSetting;
                 },

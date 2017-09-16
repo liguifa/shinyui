@@ -1275,7 +1275,7 @@ angular.module("shinyui", [])
 
 .directive("suiSwitch", function () {
     var vm = {
-        template: "<div class='sui-switch' ng-click='vm.check()' ng-readonly='vm.readonly'>\
+        template: "<div class='sui-switch sui-noselect' ng-click='vm.check()' ng-readonly='vm.readonly'>\
                     <input type='checkbox' readonly value='vm.isCheck' class='sui-switch-input' />\
                     <div ng-class='{\"true\":\"sui-switch-checkbox sui-switch-checkbox-true\",\"false\":\"sui-switch-checkbox sui-switch-checkbox-false\" }[vm.isCheck]'>\
                         <div class='sui-switch-checkbox-dot'></div>\
@@ -2700,7 +2700,7 @@ angular.module("shinyui", [])
                     <div class='sui-slider-line'>\
                         <div class='sui-slider-line-active' style='width:{{vm.value}}%'></div>\
                     </div>\
-                    <div class='sui-slider-line-point' style='left:{{vm.value}}%;' ng-mousedown='vm.startSetValue($event)' ng-mousemove='vm.setValue($event)'></div>\
+                    <div class='sui-slider-line-point' style='left:{{vm.value}}%;' ng-mousedown='vm.startSetValue($event)'></div>\
                   </div>"
     }
     return {
@@ -2710,13 +2710,18 @@ angular.module("shinyui", [])
         priority: 1,
         transclude:true,
         scope: {
-            value:"="
+            value:"=",
+            min:"=",
+            max:"=",
+            type:"=",
         },
         controller:function($scope){
             $scope.vm = {
                 value:0,
                 isStartSetValue:false,
                 startValue:0,
+                isWatch:true,
+                with:0,
                 startSetValue:function($event){
                     $scope.vm.isStartSetValue = true;
                     $scope.vm.startValue = $event.clientX;
@@ -2725,33 +2730,45 @@ angular.module("shinyui", [])
                     $scope.vm.isStartSetValue = false;
                 },
                 setValue:function($event){
-                    if($scope.vm.isStartSetValue){
-                        var addValue = $event.clientX - $scope.vm.startValue;
-                        var newValue = parseInt($scope.vm.value) + addValue;
-                        if(newValue>100){
-                            newValue = 100;
+                    $scope.$apply(function(){
+                        if($scope.vm.isStartSetValue){
+                            var ratio = 1/$scope.vm.width;
+                            var addValue = ($event.clientX - $scope.vm.startValue)*ratio*100;
+                            $scope.vm.startValue = $event.clientX;
+                            var newValue = $scope.vm.value + addValue;
+                            if(newValue>100){
+                                newValue = 100;
+                            }
+                            if(newValue<0){
+                                newValue = 0;
+                            }
+                            $scope.vm.value = newValue;
+                            
+                            console.log("add:"+addValue+"   "+ $scope.vm.value);
                         }
-                        if(newValue<0){
-                            newValue = 0;
-                        }
-                        $scope.vm.value = newValue;
-                        $scope.vm.startValue = $event.clientX;
-                        console.log("add:"+addValue+"   "+ $scope.vm.value);
-                    }
+                    });
                 }
             }
 
             $scope.$watch("value",function(value){
-                $scope.vm.value = value;
+                if($scope.vm.isWatch){
+                    var ratio = 1/($scope.max-$scope.min);
+                    $scope.vm.value = value * ratio * 100;
+                }
             });
             $scope.$watch("vm.value",function(value){
-                $scope.value = value;
+                $scope.vm.isWatch = false;
+                var ratio = 1/($scope.max-$scope.min);
+                var newValue = value / ratio / 100;
+                $scope.value = $scope.type=='int'?parseInt(newValue):newValue;
+                console.log(value);
+                //$scope.vm.isWatch = true;
             });
         },
         link:function($scope,elements,attrs){
-            document.addEventListener("mouseup",function(){
-                $scope.vm.isStartSetValue = false;
-            });
+            document.addEventListener("mouseup",$scope.vm.endSetValue);
+            document.addEventListener("mousemove",$scope.vm.setValue);
+            $scope.vm.width = elements[0].clientWidth;
         }
     }
 })
