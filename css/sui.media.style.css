@@ -336,16 +336,34 @@
 
 .sui-video-barrage-setting-list{
     list-style: none;
-    width: 160px;
-    height: 260px;
-    margin: auto;
+    width: 260px;
+    height: 160px;
     margin-top: 20px;
+    margin: auto;
+    margin-top:20px;
+    padding: 0px;
 }
 
 .sui-video-barrage-setting-list-item{
     margin: 0px;
-    width: 160px;
-    float: left;
+    line-height: 32px;
+}
+
+.sui-video-barrage-setting-list-item .sui-switch{
+    position: relative;
+    top:-12px;
+    left: 10px;
+}
+
+.sui-video-barrage-setting-list-item .sui-slider{
+    width: 140px;
+    position: relative;
+    bottom:-16px;
+    left: 5px;
+}
+
+.sui-video-barrage-setting-list-item-value{
+    float: right;
 }
 
 .sui-video-barrage-setting-toggle{

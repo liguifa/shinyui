@@ -2699,8 +2699,8 @@ angular.module("shinyui", [])
         template:"<div class='sui-slider'>\
                     <div class='sui-slider-line'>\
                         <div class='sui-slider-line-active' style='width:{{vm.value}}%'></div>\
-                        <div class='sui-slider-line-point' ng-mousemove='vm.setVolume($event)' ng-mouseup='vm.endSetVolume()' ng-mouseout='vm.endSetVolume()'></div>\
                     </div>\
+                    <div class='sui-slider-line-point' style='left:{{vm.value}}%;' ng-mousedown='vm.startSetValue($event)' ng-mousemove='vm.setValue($event)'></div>\
                   </div>"
     }
     return {
@@ -2714,11 +2714,43 @@ angular.module("shinyui", [])
         },
         controller:function($scope){
             $scope.vm = {
-                value:0
+                value:0,
+                isStartSetValue:false,
+                startValue:0,
+                startSetValue:function($event){
+                    $scope.vm.isStartSetValue = true;
+                    $scope.vm.startValue = $event.clientX;
+                },
+                endSetValue:function(){
+                    $scope.vm.isStartSetValue = false;
+                },
+                setValue:function($event){
+                    if($scope.vm.isStartSetValue){
+                        var addValue = $event.clientX - $scope.vm.startValue;
+                        var newValue = parseInt($scope.vm.value) + addValue;
+                        if(newValue>100){
+                            newValue = 100;
+                        }
+                        if(newValue<0){
+                            newValue = 0;
+                        }
+                        $scope.vm.value = newValue;
+                        $scope.vm.startValue = $event.clientX;
+                        console.log("add:"+addValue+"   "+ $scope.vm.value);
+                    }
+                }
             }
 
             $scope.$watch("value",function(value){
                 $scope.vm.value = value;
+            });
+            $scope.$watch("vm.value",function(value){
+                $scope.value = value;
+            });
+        },
+        link:function($scope,elements,attrs){
+            document.addEventListener("mouseup",function(){
+                $scope.vm.isStartSetValue = false;
             });
         }
     }
