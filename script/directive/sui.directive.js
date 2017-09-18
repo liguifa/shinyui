@@ -2696,7 +2696,7 @@ angular.module("shinyui", [])
 
 .directive("suiSlider",function(){
     var vm = {
-        template:"<div class='sui-slider'>\
+        template:"<div class='sui-slider' ng-class='{\"sui-slider-vertical\":vm.direction==\"vertical\"}'>\
                     <div class='sui-slider-line'>\
                         <div class='sui-slider-line-active' style='width:{{vm.value}}%'></div>\
                     </div>\
@@ -2714,6 +2714,7 @@ angular.module("shinyui", [])
             min:"=",
             max:"=",
             type:"=",
+            direction:"=",
         },
         controller:function($scope){
             $scope.vm = {
@@ -2722,9 +2723,10 @@ angular.module("shinyui", [])
                 startValue:0,
                 isWatch:true,
                 with:0,
+                direction:"horizontal",
                 startSetValue:function($event){
                     $scope.vm.isStartSetValue = true;
-                    $scope.vm.startValue = $event.clientX;
+                    $scope.vm.startValue = $scope.vm.direction == 'vertical' ? $event.clientY : $event.clientX;
                 },
                 endSetValue:function(){
                     $scope.vm.isStartSetValue = false;
@@ -2733,8 +2735,12 @@ angular.module("shinyui", [])
                     $scope.$apply(function(){
                         if($scope.vm.isStartSetValue){
                             var ratio = 1/$scope.vm.width;
-                            var addValue = ($event.clientX - $scope.vm.startValue)*ratio*100;
-                            $scope.vm.startValue = $event.clientX;
+                            var pos = $scope.vm.direction == 'vertical' ? $event.clientY : $event.clientX;
+                            var addValue = (pos - $scope.vm.startValue)*ratio*100;
+                            $scope.vm.startValue = pos;
+                            if($scope.vm.direction == 'vertical'){
+                                addValue = 0 - addValue;
+                            }
                             var newValue = $scope.vm.value + addValue;
                             if(newValue>100){
                                 newValue = 100;
@@ -2763,6 +2769,11 @@ angular.module("shinyui", [])
                 $scope.value = $scope.type=='int'?parseInt(newValue):newValue;
                 console.log(value);
                 //$scope.vm.isWatch = true;
+            });
+            $scope.$watch("direction",function(direction){
+                if(direction){
+                    $scope.vm.direction = direction;
+                }
             });
         },
         link:function($scope,elements,attrs){

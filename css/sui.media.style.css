@@ -95,7 +95,7 @@
     border-radius: 50%;
     margin-top: -12px;
     margin-left: -6px;
-    position: relative;subtitle
+    position: relative;
 }
 
 .sui-video-controls-list-item-progress-time{
@@ -117,14 +117,15 @@
 }
 
 .sui-video-controls-list-item-volume-control{
-    height: 102px;
+    height: 122px;
     width: 32px;
     background: #ffffff;
     border: 1px solid #e2e2e2;
     position: relative;
-    bottom: 134px;
+    bottom: 154px;
     margin-left: -2px;
     cursor: default;
+    z-index: 998;
 }
 
 .sui-video-controls-list-item-volume-control-number{
@@ -136,12 +137,14 @@
 }
 
 .sui-video-controls-list-item-volume-control-progress{
-    height: 60px;
-    width: 30px;
+    height: 15px;
+    width: 75px;
     text-align: center;
+    margin-left:-18px; 
+    margin-top: 48px;
 }
 
-.sui-video-controls-list-item-volume-control-progress-line{
+/*.sui-video-controls-list-item-volume-control-progress-line{
     width: 6px;
     height: 60px;
     background: #00a1d6;
@@ -165,7 +168,7 @@
     margin-left: -6px;
     position: relative;
     cursor: pointer;
-}
+}*/
 
 .sui-video-controls-list-item-clarity{
     height: 30px;
@@ -468,4 +471,52 @@
     float: right;
     margin-top:-6px;
     margin-right: -3px;
+}
+
+.sui-video-barrage-color{
+    background: #ffffff;
+    border:#e2e2e2 1px solid;
+    height: 200px;
+    width: 300px;
+    position: absolute;
+    top:50%;
+    left:50%;
+    margin-left: -150px;
+    margin-top: -100px;
+    padding: 10px 20px;
+}
+
+.sui-video-barrage-color-list{
+    margin: 0px;
+    padding: 0px;
+    list-style: none;
+    text-align: center;
+    margin-left: 10px;
+}
+
+.sui-video-barrage-color-list-item{
+    float: left;
+    width: 30px;
+    height: 30px;
+   padding: 2px;
+   cursor: pointer;
+   border:2px solid #ffffff;
+   border-radius: 50%;
+}
+
+.sui-video-barrage-color-list-item-active{
+    border:2px solid red;
+}
+
+.sui-video-barrage-color-list-item-dot{
+    border-radius: 50%;
+     width: 30px;
+    height: 30px;
+    background: #123456;
+}
+
+.sui-video-barrage-color-list-title{
+    line-height: 60px;
+    width: 100%;
+    text-align: center;
 }

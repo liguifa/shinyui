@@ -25,12 +25,7 @@ angular.module("shinyui.media",[])
                                 <i class='sui-icon sui-video-controls-list-item-volume-icon' ng-click='vm.showVolume()'>&#xe84e;</i>\
                                 <div class='sui-video-controls-list-item-volume-control' ng-if='vm.isShowVolume'>\
                                     <div class='sui-video-controls-list-item-volume-control-number'><span>{{vm.volume}}</span></div>\
-                                    <div class='sui-video-controls-list-item-volume-control-progress'>\
-                                        <div class='sui-video-controls-list-item-volume-control-progress-line'>\
-                                            <div class='sui-video-controls-list-item-volume-control-progress-line-actvie' style='height:{{100 - vm.volume}}%'></div>\
-                                            <div class='sui-video-controls-list-item-volume-control-progress-line-dot' ng-mousedown='vm.startSetVolume($event)' ng-mousemove='vm.setVolume($event)' ng-mouseup='vm.endSetVolume()' ng-mouseout='vm.endSetVolume()'></div>\
-                                        </div>\
-                                    </div>\
+                                    <sui-slider class='sui-video-controls-list-item-volume-control-progress' direction='\"vertical\"' value='vm.volume'  min='0' max='100' type='\"int\"'></sui-slider>\
                                 </div>\
                             </li>\
                             <li class='sui-video-controls-list-item sui-video-controls-list-item-hover'>\
@@ -49,7 +44,7 @@ angular.module("shinyui.media",[])
                             <li class='sui-video-barrage-list-item sui-video-barrage-list-item-hover' ng-click='vm.showBarrageSetting()'>\
                                 <i class='sui-icon'>&#xe845;</i>\
                             </li>\
-                            <li class='sui-video-barrage-list-item sui-video-barrage-list-item-hover'>\
+                            <li class='sui-video-barrage-list-item sui-video-barrage-list-item-hover' ng-click='vm.showBarrageColor()'>\
                                 <i class='sui-icon'>&#xf0eb;</i>\
                             </li>\
                             <li class='sui-video-barrage-list-item sui-video-barrage-list-item-text' style='width:{{vm.width-180}}px;'>\
@@ -72,6 +67,14 @@ angular.module("shinyui.media",[])
                             <li class='sui-video-barrage-setting-list-item'><span><label>字&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;号</label><sui-slider value='vm.barrageSize'  min='1' max='32' type='\"int\"'></sui-slider><span class='sui-video-barrage-setting-list-item-value'>{{vm.barrageSize}}</span></li>\
                             <li class='sui-video-barrage-setting-list-item'><span><label>速&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;度</label><sui-slider value='vm.barrageSpeech'  min='1' max='30' type='\"int\"'></sui-slider><span class='sui-video-barrage-setting-list-item-value'>{{vm.barrageSpeech}}秒</span></li>\
                             <li class='sui-video-barrage-setting-list-item'><span><label>密&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;度</label><sui-slider value='vm.barrageCount'  min='1' max='20' type='\"int\"'></sui-slider><span class='sui-video-barrage-setting-list-item-value'>{{vm.barrageCount}}条</span></li>\
+                        </ul>\
+                    </div>\
+                    <div class='sui-video-barrage-color' ng-if='vm.isShowBarrageColor'>\
+                        <div class='sui-video-barrage-color-list-title'><span>弹幕颜色</span></div>\
+                        <ul class='sui-video-barrage-color-list'>\
+                            <li class='sui-video-barrage-color-list-item' ng-class='{\"sui-video-barrage-color-list-item-active\":color==vm.currentColor}' ng-repeat='color in vm.barrageColors'>\
+                                <div class='sui-video-barrage-color-list-item-dot' ng-click='vm.setBarrageColor(color)' style='background:{{color}};'></div>\
+                            </li>\
                         </ul>\
                     </div>\
                     <div class='sui-clear'></div>\
@@ -122,6 +125,9 @@ angular.module("shinyui.media",[])
                 barrageSpeech:10,
                 barrageCount:10,
                 isShowBarrage:true,
+                isShowBarrageColor:false,
+                barrageColors:["#006633","#006699","#009966","#00CCCC","#330033","#333333","#660000","#99FF00","#CC6699","#CC9900","#CCFFFF","#FF3333","#FF9999","#FF99CC","#99CC66","#666666","#CCCCCC","#339933","#FF6600","#66CC00","#ffffff"],
+                currentColor:"#ffffff",
                 showBarrageSetting:function(){
                     $scope.vm.isShowBarrageSetting = !$scope.vm.isShowBarrageSetting;
                 },
@@ -205,12 +211,12 @@ angular.module("shinyui.media",[])
                             }, this);
                             $scope.vm.barrages = tempBarrages;
                         });
-                    },20);
+                    },$scope.vm.barrageSpeech);
                 },
                 dispatchBarrages:function(){
                     var firstBarrage = $scope.vm.queueBarrages[0];
                     if(firstBarrage.time <= $scope.vm.currentTime){
-                        for(var i=0,top=10;i<10;i++){
+                        for(var i=0,top=10;i<$scope.vm.barrageCount;i++){
                             var currentBarrages = $scope.vm.barrages.filter(function(item){
                                 return item.top == top + i*30;
                             }).sort(function(item1,item2){
@@ -241,12 +247,18 @@ angular.module("shinyui.media",[])
                         var barrage = {
                             time:$scope.vm.currentTime,
                             text:$scope.vm.inputBarrage,
-                            color:"#ffffff"
+                            color:$scope.vm.currentColor,
                         }
                         $scope.vm.queueBarrages.unshift(barrage);
                         $scope.sendbarrage({barrage:barrage});
                         $scope.vm.inputBarrage = "";
                     }
+                },
+                showBarrageColor:function(){
+                    $scope.vm.isShowBarrageColor = !$scope.vm.isShowBarrageColor;
+                },
+                setBarrageColor:function(color){
+                    $scope.vm.currentColor = color;
                 }
             }
             $scope.$watch("volume",function(volume){
