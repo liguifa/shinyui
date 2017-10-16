@@ -1297,7 +1297,7 @@ angular.module("shinyui", [])
         },
         controller: function ($scope) {
             $scope.vm = {
-                isCheck: false,
+                isCheck: null,
                 check: function () {
                     $scope.vm.isCheck = !$scope.vm.isCheck;
                 },
@@ -1308,8 +1308,10 @@ angular.module("shinyui", [])
             };
 
             $scope.$watch("vm.isCheck", function (isCheck) {
-                $scope.vm.displayText = isCheck ? $scope.vm.trueText : $scope.vm.falseText;
-                $scope.value = isCheck;
+                if(isCheck != null){
+                    $scope.vm.displayText = isCheck ? $scope.vm.trueText : $scope.vm.falseText;
+                    $scope.value = isCheck;
+                }
             });
 
             $scope.$watch("value",function(value){

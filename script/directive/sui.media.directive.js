@@ -11,12 +11,8 @@ angular.module("shinyui.media",[])
                                 <i class='sui-icon sui-video-controls-list-item-play' ng-click='vm.play()' ng-if='!vm.isPlay'>&#xe86e;</i>\
                             </li>\
                             <li class='sui-video-controls-list-item'>\
+                                <sui-mediaslider width='vm.width-312' buffered-progress='vm.buffered_progress' play-progress='vm.play_progress' play-progress-change='vm.play_progress_change(progress)'></sui-mediaslider>\
                                 <div class='sui-video-controls-list-item-progress' style='width:{{vm.width-261}}px;'>\
-                                    <div class='sui-video-controls-list-item-progress-line' style='width:{{vm.width-312}}px;'>\
-                                        <div class='sui-video-controls-list-item-progress-line-load' style='width:{{vm.buffered_progress}}%;'></div>\
-                                        <div class='sui-video-controls-list-item-progress-line-load-play' style='width:{{vm.paly_progress}}%;'></div>\
-                                        <div class='sui-video-controls-list-item-progress-line-dot' style='left:{{vm.paly_progress}}%;'></div>\
-                                    </div>\
                                     <span class='sui-video-controls-list-item-progress-time'>{{vm.currentTime | time}}/{{vm.duration | time}}</span>\
                                 </div>\
                                 <div class='sui-clear'></div>\
@@ -58,7 +54,7 @@ angular.module("shinyui.media",[])
                     </div>\
                     <div class='sui-video-subtitle'><span>{{vm.currentSubTitle}}</span></div>\
                     <div ng-if='vm.isShowBarrage' class='sui-video-barrage-pool' style='bottom:{{vm.height}}px;height:{{vm.height-68}}px;'>\
-                        <div ng-repeat='item in vm.barrages' class='sui-video-barrage-pool-text' style='left:{{item.left}}px;top:{{item.top}}px;color:{{item.color}};font-size:{{vm.barrageSize}}px;opacity:{{vm.barrageOpacity/100}}'>{{item.text}}</div>\
+                        <div ng-repeat='item in vm.barrages' class='sui-video-barrage-pool-text' style='left:{{item.left}}px;top:{{item.top}}px;color:{{item.color}};font-size:{{vm.barrageSize}}px;opacity:{{(100-vm.barrageOpacity)/100}}'>{{item.text}}</div>\
                     </div>\
                     <div class='sui-video-barrage-setting' ng-if='vm.isShowBarrageSetting'>\
                         <ul class='sui-video-barrage-setting-list'>\
@@ -99,7 +95,7 @@ angular.module("shinyui.media",[])
             $scope.vm = {
                 video:null, 
                 duration:0,
-                paly_progress:0,
+                play_progress:0,
                 currentTime:0,
                 buffered_progress:0,
                 isPlay:true,
@@ -110,7 +106,7 @@ angular.module("shinyui.media",[])
                 isFull:false,
                 oldSize:{width:660,height:500},
                 isShowVolume:false,
-                currentSubTitle:"飞鸟尽、良弓藏、狡兔死、走狗烹",
+                currentSubTitle:"",
                 obsoleteSubTitles:[],
                 queueSubTitles:[],
                 src:"",
@@ -142,7 +138,7 @@ angular.module("shinyui.media",[])
                 },
                 timeupdate:function(){
                     $scope.$apply(function(){
-                        $scope.vm.paly_progress = ($scope.vm.video.currentTime/$scope.vm.duration)*100;
+                        $scope.vm.play_progress = ($scope.vm.video.currentTime/$scope.vm.duration)*100;
                         $scope.vm.currentTime = $scope.vm.video.currentTime;
                         var firstSubTitle = $scope.vm.queueSubTitles[0];
                         if(firstSubTitle.time <= $scope.vm.currentTime){
@@ -259,20 +255,23 @@ angular.module("shinyui.media",[])
                 },
                 setBarrageColor:function(color){
                     $scope.vm.currentColor = color;
+                },
+                play_progress_change:function(progress){
+                    $scope.vm.video.currentTime = (progress/100)*$scope.vm.duration;
                 }
             }
-            $scope.$watch("volume",function(volume){
-                if(volume){
-                    volume = parseInt(volume);
-                    if(volume<0){
-                        volume = 0
-                    }
-                    if(volume>100){
-                        volume = 100;
-                    }
-                    $scope.vm.volume = volume;
-                }
-            });
+            // $scope.$watch("volume",function(volume){
+            //     if(volume){
+            //         volume = parseInt(volume);
+            //         if(volume<0){
+            //             volume = 0
+            //         }
+            //         if(volume>100){
+            //             volume = 100;
+            //         }
+            //         $scope.vm.volume = volume;
+            //     }
+            // });
             $scope.$watch("subTitles",function(subTitles){
                 subTitles.sort(function(item1,item2){
                     return item1.time - item2.time;
@@ -468,6 +467,67 @@ angular.module("shinyui.media",[])
             }
             returnValue += second;
             return returnValue;
+        }
+    }
+})
+
+.directive("suiMediaslider",function(){
+    var vm = {
+        template:"<div class='sui-video-controls-list-item-progress-line' style='width:{{width}}px;'>\
+                    <div class='sui-video-controls-list-item-progress-line-load' style='width:{{bufferedProgress}}%;'></div>\
+                    <div class='sui-video-controls-list-item-progress-line-load-play' ng-click='vm.jumpProgress($event)' style='width:{{playProgress}}%;'></div>\
+                    <div class='sui-video-controls-list-item-progress-line-dot' style='left:{{playProgress}}%;'></div>\
+                  </div>"
+    }
+    return {
+        restrict: "E",
+        template: vm.template,
+        replace: true,
+        priority: 1,
+        transclude:true,
+        scope: {
+            width:"=",
+            bufferedProgress:"=",
+            playProgress:"=",
+            playProgressChange:"&",
+        },
+        controller:function($scope){
+            $scope.vm = {
+                isMove:false,
+                startPoint:0,
+                progressX:0,
+                startMove:function($event){
+                    $scope.vm.isMove = true;
+                    $scope.vm.startPoint = $event.clientX;
+                },
+                move:function($event){
+                    if($scope.vm.isMove){
+                        $scope.$apply(function(){
+                            var addX = $event.clientX - $scope.vm.startPoint;
+                            var progress = $scope.playProgress + addX / $scope.width * 100;
+                            $scope.vm.startPoint = $event.clientX;
+                            $scope.playProgress = progress;
+                            $scope.playProgressChange({progress:progress});
+                        });
+                    }
+                },
+                endMove:function($event){
+                    $scope.vm.isMove = false;
+                },
+                jumpProgress:function($event){
+                    var progress = $event.clientX - $scope.vm.progressX;
+                    $scope.playProgress = progress / $scope.width * 100
+                    $scope.playProgressChange({progress:$scope.playProgress});
+                }
+            }
+        },
+        link:function($scope,elements,attrs){
+            var slider = elements[0];
+            var dot = slider.getElementsByClassName("sui-video-controls-list-item-progress-line-dot")[0];
+            dot.addEventListener("mousedown",$scope.vm.startMove);
+            document.addEventListener("mousemove",$scope.vm.move);
+            document.addEventListener("mouseup",$scope.vm.endMove);
+            $scope.vm.progressX = slider.offsetWidth;
         }
     }
 })
