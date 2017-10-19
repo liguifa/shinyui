@@ -2579,3 +2579,50 @@ max-height:20px;
     margin-left: -4px;
     cursor: pointer;
 }
+
+.sui-textbox{
+    border-left: 3px solid #19A094;
+    background: #EEEEEE;
+    padding: 20px 10px;
+    padding-bottom: 40px;
+    padding-right: 65px;
+    position: relative;
+}
+
+.sui-textbox-line{
+    float: left;
+    width: 28px;
+    margin: 0px;
+    padding: 0px;
+    padding-right: 10px;
+    border-right: solid 1px #999999;
+    color: #999999;
+}
+
+.sui-textbox-line ul{
+    list-style: none;
+    margin: 0px;
+    width: 100%;
+    padding: 0px;
+   
+}
+
+.sui-textbox-line ul li{
+    margin: 0px;
+    width: 100%;
+    padding: 0px;
+    text-align: right;
+    line-height: 28px;
+}
+
+.sui-textbox-context{
+    margin-left: 55px;
+    width: 100%;
+    line-height: 28px;
+}
+
+.sui-textbox-page{
+    position: absolute;
+    bottom:-8px;
+    right: 10px;
+}
