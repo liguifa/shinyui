@@ -67,39 +67,16 @@
    <sui-top></sui-top>
 </body>
 </html>
-<script src="../script/lib/prism.js"></script>
-<script src="../script/lib/angular.min.js"></script>
-<script src="../script/directive/sui.directive.js"></script>
-<script src="../script/directive/sui.icon.directive.js"></script>
-<script src="../script/common/guid.service.js"></script>
-<script src="../script/common/sui.icon.js"></script>
 <script>
-    (function () {
-        function demo_controller($scope) {
-            $scope.vm = {
-                primary: "原始按钮",
-                default: "默认按钮",
-                normal: "百搭按钮",
-                warm:"暖色按钮",
-                danger:"警告按钮",
-                disabled_text: "禁用按钮",
-                disabled: true,
-                c: "https://www.baidu.com",
-                property: {
-                    fields: [{ name: "名称" }, { name: "类型" }, { name: "可选值" }, { name: "示例" }, { name: "默认值" }, { name: "意义" }],
-                    datas: [{ rows: { name: "text", type: "string", choose: "*", example: "原始按钮", default: "", commnet: "按钮标题" } },
-                        { rows: { name: "type", type: "string", choose: "primary:原始按钮,default:默认按钮,normal:百搭按钮,warm:暖色按钮,danger:警告按钮,disabled:禁用按钮", example: "default", default: "default", commnet: "按钮类型" } },
-                        { rows: { name: "size", type: "string", choose: "big:大,defaule:默认,small:小,mini:很小", example: "default", default: "default", commnet: "按钮大小" } },
-                        { rows: { name: "href", type: "string", choose: "*", example: "https://www.baidu.com", default: "", commnet: "点击按钮之后跳转的页面" } },
-                        { rows: { name: "disabled", type: "bool", choose: "true:可用,false:不可用", example: "true", default: "true", commnet: "按钮状态" } },
-                    ]
-                },
-                functions:{
-                    fields:[{name:"名称"},{name:"参数"},{name:"意义"}],
-                    datas:[{rows:{name:"click",args:"",comment:""}}]
-                }
-            }
+    process = {
+        env : {
+            NODE_ENV : 'dev'
         }
-        angular.module("demo", ["shinyui","shinyui.icon"]).controller("demo.controller", demo_controller);
-    })();
+    };
 </script>
+
+<script src="../node_modules/react/umd/react.production.min.js"></script>
+<script src="../node_modules/react-dom/umd/react-dom.production.min.js"></script>
+<script src="../dist/shinyui.min.v1.0.0.js"></script>
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/6to5/3.6.5/browser.js"></script> -->
+<!-- <script src="../script/component/sui.component.js"></script> -->
