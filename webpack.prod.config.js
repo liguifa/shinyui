@@ -7,7 +7,7 @@ module.exports = {
     },
     output:{
         path:__dirname,
-        filename:"./dist/shinyui.v1.0.0.js"
+        filename:"./dist/shinyui.min.v1.0.0.js"
     },
     module:{
         loaders:[
@@ -26,15 +26,13 @@ module.exports = {
             'process.env.NODE_ENV':JSON.stringify(process.env.NODE_ENV)
         }),
 
-        // new webpack.optimize.UglifyJsPlugin({
-        //     compress:{
-        //         warnings:false
-        //     },
-        //     except:['import']
-        // }),
+        new webpack.optimize.UglifyJsPlugin({
+            compress:{
+                warnings:false
+            },
+            except:['import']
+        }),
 
         new webpack.HotModuleReplacementPlugin()
     ],
 }
-
- 
