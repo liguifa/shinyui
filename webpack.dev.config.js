@@ -11,16 +11,18 @@ module.exports = {
     },
     module:{
         loaders:[
-            {test:/\.(js|jsx)/,loader:'babel-loader',exclude: /(node_modules)/, query: {
-                presets: ['es2015', 'react']
-            }},
+            {test:/\.(js|jsx)/,loader:'babel-loader',exclude: /(node_modules)/},
             {test:/\.css$/,loader:'style-loader!css-loader'},
             {test:/\.(png|jpg)$/,loader:'url-loader'},
-            {test:/\.(eot|svg|ttf|woff)$/,loader:'file-loader'}
+            {test:/\.(eot|svg|ttf|woff)$/,loader:'url-loader'}
         ]
     },
     plugins:[
-        //new webpack.BannerPlugin("Hello World"),
+        new webpack.BannerPlugin(`
+        ShinyUI v1.0.0
+        (c) 2017 http://liguifa.github.io/shinyui
+        License: MIT
+       `),
 
         new webpack.DefinePlugin({
             'process.env.NODE_ENV':JSON.stringify(process.env.NODE_ENV)

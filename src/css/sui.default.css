@@ -1454,16 +1454,19 @@ max-height:20px;
 
 .sui-text-input {
     line-height: 24px;
-    padding-left:2px;
+    padding-left:5px;
     border: 1px solid #e6e6e6;
     background-color: #fff;
     border-radius: 2px;
+    width: 180px;
+    height: 30px;
     outline: 0;
     -webkit-transition: border-color .3s cubic-bezier(.65,.05,.35,.5);
     transition: border-color .3s cubic-bezier(.65,.05,.35,.5);
     -webkit-box-sizing: border-box !important;
     -moz-box-sizing: border-box !important;
     box-sizing: border-box !important;
+    box-shadow: inset 0px 1px 2px rgba(0,0,0,.1);
 }
 
 .sui-footer{

@@ -15,5 +15,5 @@
         }
     }
 
-    angular.module("admin").factory("constant.service", constant_service);
+    angular.module("shinyui").factory("constant.service", constant_service);
 })();

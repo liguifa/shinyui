@@ -1,4 +1,4 @@
-angular.module("sqladmin")
+angular.module("shinyui")
     
 .filter('to_trusted', ['$sce', function ($sce) {
     return function (text) {

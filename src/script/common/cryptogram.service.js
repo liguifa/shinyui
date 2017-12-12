@@ -13,5 +13,5 @@
         }
     }
 
-    angular.module("admin").factory("cryptogram.service", [cryptogram_service])
+    angular.module("shinyui").factory("cryptogram.service", [cryptogram_service])
 })();
