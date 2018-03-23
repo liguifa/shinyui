@@ -2,22 +2,23 @@ var path = require("path");
 var webpack = require("webpack");
 
 module.exports = {
-    entry:{
-        app:["./main.js"],
+    entry: {
+        app: ["./main.js"],
     },
-    output:{
-        path:__dirname,
-        filename:"./dist/shinyui.v1.0.0.js"
+    output: {
+        path: __dirname,
+        filename: "./dist/shinyui.v1.0.0.js"
     },
-    module:{
-        loaders:[
-            {test:/\.(js|jsx)/,loader:'babel-loader',exclude: /(node_modules)/},
-            {test:/\.css$/,loader:'style-loader!css-loader'},
-            {test:/\.(png|jpg)$/,loader:'url-loader'},
-            {test:/\.(eot|svg|ttf|woff)$/,loader:'url-loader'}
+    module: {
+        loaders: [
+            { test: /\.(js|jsx)/, loader: 'babel-loader', exclude: /(node_modules)/ },
+            { test: /\.css$/, loader: 'style-loader!css-loader' },
+            { test: /\.(png|jpg)$/, loader: 'url-loader' },
+            { test: /\.(eot|svg|ttf|woff)$/, loader: 'url-loader' },
+            { test: /\.vue/, loader: 'vue-loader' }
         ]
     },
-    plugins:[
+    plugins: [
         new webpack.BannerPlugin(`
         ShinyUI v1.0.0
         (c) 2017 http://liguifa.github.io/shinyui
@@ -25,7 +26,7 @@ module.exports = {
        `),
 
         new webpack.DefinePlugin({
-            'process.env.NODE_ENV':JSON.stringify(process.env.NODE_ENV)
+            'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
         }),
 
         // new webpack.optimize.UglifyJsPlugin({
@@ -37,6 +38,10 @@ module.exports = {
 
         new webpack.HotModuleReplacementPlugin()
     ],
+    resolve: {
+        alias: {
+            'vue': 'vue/dist/vue.js'
+        }
+    }
 }
 
- 
