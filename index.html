@@ -1,13 +1,90 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
+    <style>
+        html,
+        body,
+        #app {
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+            margin: 0px;
+            padding: 0px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .demo-header {
+            flex-grow: 0;
+            height: 55px;
+            width: 100%;
+        }
+
+        .demo-content {
+            width: 100%;
+            height: 100%;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: row;
+        }
+
+        .demo-sidebar {
+            flex-grow: 0;
+            width: 200px;
+        }
+
+        .demo-main {
+            flex-grow: 1;
+            height: 100%;
+            padding: 10px;
+            overflow: hidden;
+            border: none;
+            width: 100px;
+            flex-shrink: 1;
+            display: block;
+        }
+    </style>
 </head>
+
 <body>
-    <div id="app"></div>
+    <div id="app">
+        <sui-menu class="demo-header" :items="navs" icon="https://liguifa.github.io/shinyui/demo/images/logo.png">
+            <sui-avatar src="http://liguifa.wang/Themes/Images/me.png" href="https://www.github.com/liguifa/shinyui" style="height:42px;width:42px;margin-top:7px;"></sui-avatar>
+        </sui-menu>
+        <div class="demo-content">
+            <sui-sidebar class="demo-sidebar" :items="sidenavs" style="z-index:999"></sui-sidebar>
+            <iframe class="demo-main" :src="url" name="index_view" :url="url" id="name"></iframe>
+        </div>
+    </div>
 </body>
+
 </html>
+<script src="./node_modules/vue/dist/vue.min.js"></script>
 <script src="./dist/shinyui.v1.0.0.js"></script>
+<script>
+    new Vue({
+        el: "#app",
+        data: {
+            navs: [
+                { title: "控件", url: "", isActive: true, isLink: true },
+                { title: "图标", url: "demo/icons/index.html", isActive: false, isLink: true },
+                { title: "弹出", url: "demo/pop/index.html", isActive: false, isLink: true },
+                { title: "媒体", url: "demo/media/index.html", isActive: false, isLink: true },
+                { title: "方法", url: "functions/index.html", isActive: false, isLink: true },
+            ],
+            sidenavs: [
+                { title: "基本元素", subs: [{ title: "按钮", url: "demo/button.html", target: "index_view", isActive: true }, { title: "按钮组", url: "demo/button_group.html", target: "index_view", isActive: false }, { title: "导航", url: "demo/nav.html", target: "index_view", isActive: false }, { title: "面包屑", url: "demo/crumbs.html", target: "index_view", isActive: false }, { title: "区块", url: "demo/block.html", target: "index_view", isActive: false }, { title: "选项卡", url: "demo/tabs.html", target: "index_view", isActive: false }, { title: "进度条", url: "demo/progress.html", target: "index_view", isActive: false }, { url: "demo/panel.html", target: "index_view", title: "折叠面板", isActive: false }, { url: "demo/datagrid.html", target: "index_view", title: "基本表格", isActive: false }, { title: "简单铺助元素", url: "demo/basic.html", target: "index_view", isActive: false }] },
+                { title: "表单元素", subs: [{ title: "下拉框", url: "demo/combo_box.html", target: "index_view", isActive: false }, { title: "多选框", url: "demo/mulselect.html", target: "index_view", isActive: false }, { title: "开关", url: "demo/switch.html", target: "index_view", isActive: false }, { title: "复选框", url: "demo/check_box.html", target: "index_view", isActive: false }, { title: "单选框", url: "demo/radio.html", target: "index_view", isActive: false }, { title: "输入框", url: "demo/input.html", target: "index_view", isActive: false }, { title: "数字框", url: "demo/number.html", target: "index_view", isActive: false }, { title: "日期选择", url: "demo/calendar.html", target: "index_view", isActive: false }, { title: "滑动输入条", url: "demo/slider.html", target: "index_view", isActive: false }] },
+                { title: "组件元素", subs: [{ title: "文件上传", url: "demo/uploader.html", target: "index_view", isActive: false }, { title: "窗口", url: "demo/window.html", target: "index_view", isActive: false }, { title: "搜索框", url: "demo/search.html", target: "index_view", isActive: false }, { title: "头像", url: "demo/avatar.html", target: "index_view", isActive: false }, { title: "卡片", url: "demo/card.html", target: "index_view", isActive: false }, { title: "走马灯", url: "demo/carousel.html", target: "index_view", isActive: false }, { title: "时间线", url: "demo/timeline.html", target: "index_view", isActive: false }, { title: "步骤条", url: "demo/steps.html", target: "index_view", isActive: false }, { title: "文本框", url: "demo/textbox.html", target: "index_view", isActive: false }] },
+                { title: "消息元素", subs: [{ title: "消息栏", url: "demo/message_bar.html", target: "index_view", isActive: false }, { title: "文字提示", url: "demo/tooltip.html", target: "index_view", isActive: false }] },
+                { title: "报表元素", subs: [{ title: "柱状图", url: "demo/histogram.html", target: "index_view", isActive: false }, { title: "折线图", url: "demo/line.html", target: "index_view", isActive: false }, { title: "扇形图", url: "demo/fan.html", target: "index_view", isActive: false }, { title: "扇形图", url: "demo/fan.html", target: "index_view", isActive: false }] },
+            ],
+            url: "demo/button.html",
+        }
+    })
+</script>

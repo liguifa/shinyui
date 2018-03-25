@@ -3,7 +3,7 @@ var webpack = require("webpack");
 
 module.exports = {
     entry: {
-        app: ["./main.js"],
+        app: ["./src/index.js"],
     },
     output: {
         path: __dirname,
@@ -18,6 +18,7 @@ module.exports = {
             { test: /\.vue/, loader: 'vue-loader' }
         ]
     },
+    devtool:"source-map",
     plugins: [
         new webpack.BannerPlugin(`
         ShinyUI v1.0.0
